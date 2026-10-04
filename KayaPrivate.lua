@@ -6280,6 +6280,62 @@ do
         }), 10)
         mk("UIStroke", pane, { Color = UIC.rim, Thickness = 1, Transparency = 0.3 })
 
+        -- STEAL bar movable
+        do
+            local UIS = game:GetService("UserInputService")
+            local dragging, startPos, startInput
+            local function beginDrag(input)
+                if input.UserInputType ~= Enum.UserInputType.MouseButton1
+                    and input.UserInputType ~= Enum.UserInputType.Touch then return end
+                dragging = true
+                startInput = input.Position
+                -- convert scale position to offset so drag works
+                local abs = wrap.AbsolutePosition
+                wrap.AnchorPoint = Vector2.new(0, 0)
+                wrap.Position = UDim2.fromOffset(abs.X, abs.Y)
+                startPos = wrap.Position
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then dragging = false end
+                end)
+            end
+            pane.Active = true
+            wrap.Active = true
+            pane.InputBegan:Connect(beginDrag)
+            wrap.InputBegan:Connect(beginDrag)
+            UIS.InputChanged:Connect(function(input)
+                if not dragging then return end
+                if input.UserInputType ~= Enum.UserInputType.MouseMovement
+                    and input.UserInputType ~= Enum.UserInputType.Touch then return end
+                local d = input.Position - startInput
+                wrap.Position = UDim2.fromOffset(startPos.X.Offset + d.X, startPos.Y.Offset + d.Y)
+            end)
+        end
+
+        -- minimize STEAL bar
+        do
+            local minBtn = mk("TextButton", pane, {
+                AnchorPoint = Vector2.new(1, 0),
+                Position = UDim2.new(1, -4, 0, 2),
+                Size = UDim2.fromOffset(18, 14),
+                BackgroundColor3 = UIC.rim,
+                Text = "-", TextSize = 12, Font = Enum.Font.GothamBold,
+                TextColor3 = Color3.fromRGB(255,255,255),
+                AutoButtonColor = false, ZIndex = 5,
+            })
+            corner(minBtn, 4)
+            local minimized = false
+            minBtn.MouseButton1Click:Connect(function()
+                minimized = not minimized
+                for _, ch in ipairs(pane:GetChildren()) do
+                    if ch ~= minBtn and not ch:IsA("UICorner") and not ch:IsA("UIStroke") then
+                        if ch:IsA("GuiObject") then ch.Visible = not minimized end
+                    end
+                end
+                minBtn.Text = minimized and "+" or "-"
+                wrap.Size = minimized and UDim2.fromOffset(40, 22) or UDim2.fromOffset(wrap.Size.X.Offset > 0 and wrap.Size.X.Offset or 300, 38)
+            end)
+        end
+
         stealBarTitle = mk("TextLabel", pane, {
             Size = UDim2.new(1, -76, 0, 13), Position = UDim2.fromOffset(12, 8),
             BackgroundTransparency = 1, Font = UIFB, TextSize = 10,
@@ -7038,6 +7094,7 @@ do
     -- Панель тоже уезжает в отложенную загрузку: на входе она не нужна,
     -- а строит она ScreenGui и вешает RenderStepped.
     _G.MeerkoLate("KAYA PRIVATE", function()
+    -- KAYA PRIVATE (FPS/PING) panel removed
     local guiParent = (gethui and gethui()) or game:GetService("CoreGui")
     for _, par in ipairs({ guiParent, PG }) do
         pcall(function()
@@ -7045,7 +7102,9 @@ do
             if old then old:Destroy() end
         end)
     end
-
+    _G.MeerkoToggleKayaPrivate = function() return false end
+    _G.MeerkoToggleFPSBar = function() return false end
+    do return end
     local sg = mk("ScreenGui", nil, {
         Name = "MeerkoTP", ResetOnSpawn = false, IgnoreGuiInset = true,
         DisplayOrder = 999999, ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
@@ -9480,7 +9539,8 @@ _G.MeerkoLate("TIMER ESP", function()
     end
     local function round(o, r) mk("UICorner", o, { CornerRadius = UDim.new(0, r or 8) }) return o end
 
-    if _G.MeerkoTimerESP == nil then _G.MeerkoTimerESP = true end
+    if _G.MeerkoTimerESP == nil then _G.MeerkoTimerESP = false end
+    _G.MeerkoTimerESP = false
 
     local W, H = 300, 64
     local host = (gethui and gethui()) or game:GetService("CoreGui")
@@ -10849,4 +10909,76 @@ _G.MeerkoLate("PANEL HIDE", function()
 end)
 
 
+-- Minimize buttons on each panel (except UI tab)
+_G.MeerkoLate("PANEL MINIMIZE", function()
+    local host = (gethui and gethui()) or game:GetService("CoreGui")
+    local names = {
+        "MeerkoTargets", "MeerkoExtras", "MeerkoTPSpeed", "MeerkoInvis",
+        "MeerkoAutoKick", "MeerkoAntiFlasher", "MeerkoVehicleSelect",
+        "MeerkoPriList", "MeerkoTPBind", "MeerkoTPTrail",
+    }
+    local function addMin(sg)
+        if not sg or sg:GetAttribute("H4CKMin") then return end
+        sg:SetAttribute("H4CKMin", true)
+        local root = sg:FindFirstChild("Root") or sg:FindFirstChildWhichIsA("Frame")
+        if not root then return end
+        if root:FindFirstChild("MinBtn_H4CK") then return end
+        local btn = Instance.new("TextButton")
+        btn.Name = "MinBtn_H4CK"
+        btn.AnchorPoint = Vector2.new(1, 0)
+        btn.Position = UDim2.new(1, -6, 0, 4)
+        btn.Size = UDim2.fromOffset(20, 16)
+        btn.BackgroundColor3 = Color3.fromRGB(220, 80, 140)
+        btn.Text = "-"
+        btn.TextSize = 12
+        btn.Font = Enum.Font.GothamBold
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.AutoButtonColor = false
+        btn.ZIndex = 50
+        btn.Parent = root
+        local c = Instance.new("UICorner")
+        c.CornerRadius = UDim.new(0, 4)
+        c.Parent = btn
+        local openSize = root.Size
+        local minimized = false
+        btn.MouseButton1Click:Connect(function()
+            minimized = not minimized
+            for _, ch in ipairs(root:GetChildren()) do
+                if ch ~= btn and ch.Name ~= "MinBtn_H4CK" and not ch:IsA("UICorner") and not ch:IsA("UIStroke") and not ch:IsA("UIGradient") then
+                    if ch:IsA("GuiObject") then
+                        if ch.Name == "Shadow" or (ch:IsA("Frame") and ch.ZIndex < 0) then
+                            -- keep chrome
+                        else
+                            ch.Visible = not minimized
+                        end
+                    end
+                end
+            end
+            btn.Text = minimized and "+" or "-"
+            if minimized then
+                root.Size = UDim2.fromOffset(math.min(openSize.X.Offset, 120), 26)
+            else
+                root.Size = openSize
+            end
+        end)
+    end
+    local function scan()
+        for _, n in ipairs(names) do
+            local g = host:FindFirstChild(n)
+            if g then addMin(g) end
+            pcall(function()
+                local cg = game:GetService("CoreGui")
+                local g2 = cg:FindFirstChild(n)
+                if g2 then addMin(g2) end
+            end)
+        end
+    end
+    scan()
+    task.spawn(function()
+        for _ = 1, 20 do
+            task.wait(0.5)
+            scan()
+        end
+    end)
+end)
 
