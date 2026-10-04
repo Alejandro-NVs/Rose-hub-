@@ -7366,6 +7366,27 @@ _G.MeerkoLate("TARGETS", function()
         BackgroundTransparency = 1, Text = "STEAL TARGET", Font = FBK, TextSize = 12,
         TextColor3 = C.txt, TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 2,
     })
+    local _minBtn = round(mk("TextButton", root, {
+        AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -6, 0, 8),
+        Size = UDim2.fromOffset(18, 14), BackgroundColor3 = C.acc,
+        Text = "-", TextSize = 11, Font = FBK, TextColor3 = Color3.fromRGB(255,255,255),
+        AutoButtonColor = false, ZIndex = 20,
+    }), 4)
+    local _openSz = root.Size
+    local _minOn = false
+    _minBtn.MouseButton1Click:Connect(function()
+        _minOn = not _minOn
+        _minBtn.Text = _minOn and "+" or "-"
+        for _, ch in ipairs(root:GetChildren()) do
+            if ch:IsA("GuiObject") and ch ~= _minBtn and not (ch:IsA("UIStroke") or ch:IsA("UIGradient") or ch:IsA("UICorner")) then
+                if ch:IsA("TextLabel") and ch.Text == "STEAL TARGET" then ch.Visible = true
+                elseif ch.ZIndex and ch.ZIndex < 0 then
+                else ch.Visible = not _minOn end
+            end
+        end
+        _minBtn.Visible = true
+        if _minOn then root.Size = UDim2.fromOffset(_openSz.X.Offset, 28) else root.Size = _openSz end
+    end)
     mk("Frame", root, {
         Position = UDim2.fromOffset(12, 39), Size = UDim2.new(1, -24, 0, 1),
         BackgroundColor3 = C.line, BorderSizePixel = 0,
@@ -8245,7 +8266,7 @@ _G.MeerkoLate("EXTRAS", function()
 
     local root = round(mk("Frame", sg, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
-        Size = UDim2.fromOffset(155, 220),
+        Size = UDim2.fromOffset(148, 190),
         Position = (function()
             local cam = workspace.CurrentCamera
             local vx = (cam and cam.ViewportSize.X) or 400
@@ -8275,6 +8296,40 @@ _G.MeerkoLate("EXTRAS", function()
         BackgroundTransparency = 1, Text = "EXTRAS", Font = FB, TextSize = 12,
         TextColor3 = C.txt, Active = true,
     })
+    local _minBtn = round(mk("TextButton", root, {
+        AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -6, 0, 8),
+        Size = UDim2.fromOffset(18, 14), BackgroundColor3 = C.acc,
+        Text = "-", TextSize = 11, Font = FB, TextColor3 = Color3.fromRGB(255,255,255),
+        AutoButtonColor = false, ZIndex = 20,
+    }), 4)
+    local _openSz = root.Size
+    local _minOn = false
+    _minBtn.MouseButton1Click:Connect(function()
+        _minOn = not _minOn
+        _minBtn.Text = _minOn and "+" or "-"
+        for _, ch in ipairs(root:GetChildren()) do
+            if ch:IsA("GuiObject") and ch ~= _minBtn and ch.Name ~= "Shadow"
+                and not (ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL") or ch.Text:find("TP") or ch.Text:find("AUTO") or ch.Text:find("INVIS")))
+                and not (ch:IsA("UIStroke") or ch:IsA("UIGradient") or ch:IsA("UICorner")) then
+                if ch.ZIndex and ch.ZIndex < 0 then
+                else
+                    ch.Visible = not _minOn
+                end
+            end
+        end
+        -- keep title visible
+        for _, ch in ipairs(root:GetChildren()) do
+            if ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL TARGET") or ch.Text:find("TP SPEED") or ch.Text:find("AUTO KICK") or ch.Text:find("INVIS")) then
+                ch.Visible = true
+            end
+        end
+        _minBtn.Visible = true
+        if _minOn then
+            root.Size = UDim2.fromOffset(_openSz.X.Offset, 28)
+        else
+            root.Size = _openSz
+        end
+    end)
     mk("Frame", root, {
         Position = UDim2.fromOffset(12, 36), Size = UDim2.new(1, -24, 0, 2),
         BackgroundColor3 = C.line, BorderSizePixel = 0,
@@ -8783,7 +8838,7 @@ _G.MeerkoLate("TP BIND", function()
 
     local root2 = rnd(mk2("Frame", sg2, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
-        Size = UDim2.fromOffset(170, 80),
+        Size = UDim2.fromOffset(150, 72),
         Position = (function()
             local cam = workspace.CurrentCamera
             local vx = (cam and cam.ViewportSize.X) or 400
@@ -9000,6 +9055,40 @@ _G.MeerkoLate("TP SPEED", function()
         BackgroundTransparency = 1, Text = "TP SPEED", Font = FB, TextSize = 12,
         TextColor3 = C.txt, Active = true,
     })
+    local _minBtn = round(mk("TextButton", root, {
+        AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -6, 0, 8),
+        Size = UDim2.fromOffset(18, 14), BackgroundColor3 = C.acc,
+        Text = "-", TextSize = 11, Font = FB, TextColor3 = Color3.fromRGB(255,255,255),
+        AutoButtonColor = false, ZIndex = 20,
+    }), 4)
+    local _openSz = root.Size
+    local _minOn = false
+    _minBtn.MouseButton1Click:Connect(function()
+        _minOn = not _minOn
+        _minBtn.Text = _minOn and "+" or "-"
+        for _, ch in ipairs(root:GetChildren()) do
+            if ch:IsA("GuiObject") and ch ~= _minBtn and ch.Name ~= "Shadow"
+                and not (ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL") or ch.Text:find("TP") or ch.Text:find("AUTO") or ch.Text:find("INVIS")))
+                and not (ch:IsA("UIStroke") or ch:IsA("UIGradient") or ch:IsA("UICorner")) then
+                if ch.ZIndex and ch.ZIndex < 0 then
+                else
+                    ch.Visible = not _minOn
+                end
+            end
+        end
+        -- keep title visible
+        for _, ch in ipairs(root:GetChildren()) do
+            if ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL TARGET") or ch.Text:find("TP SPEED") or ch.Text:find("AUTO KICK") or ch.Text:find("INVIS")) then
+                ch.Visible = true
+            end
+        end
+        _minBtn.Visible = true
+        if _minOn then
+            root.Size = UDim2.fromOffset(_openSz.X.Offset, 28)
+        else
+            root.Size = _openSz
+        end
+    end)
     mk("Frame", root, {
         Position = UDim2.fromOffset(12, 36), Size = UDim2.new(1, -24, 0, 2),
         BackgroundColor3 = C.line, BorderSizePixel = 0,
@@ -9183,7 +9272,7 @@ _G.MeerkoLate("PR LIST", function()
     local function round(o, r) mk("UICorner", o, { CornerRadius = UDim.new(0, r or 8) }) return o end
     local function stroke(o, col) mk("UIStroke", o, { Color = col or C.line, Thickness = 1 }) return o end
 
-    local W, H = 175, 240
+    local W, H = 165, 220
     local host = (gethui and gethui()) or game:GetService("CoreGui")
     pcall(function()
         local old = host:FindFirstChild("MeerkoPriList")
@@ -10099,10 +10188,21 @@ _G.MeerkoLate("INVIS", function()
     }), 14)
 
     local head = mk("TextLabel", root, {
-        Position = UDim2.fromOffset(0, 10), Size = UDim2.new(1, 0, 0, 20),
-        BackgroundTransparency = 1, Text = "INVIS STEAL", Font = FB, TextSize = 12,
+        Position = UDim2.fromOffset(0, 10), Size = UDim2.new(1, -28, 0, 20),
+        BackgroundTransparency = 1, Text = "INVIS STEAL", Font = FB, TextSize = 11,
         TextColor3 = C.txt, Active = true,
     })
+    local minBtn = round(mk("TextButton", root, {
+        AnchorPoint = Vector2.new(1, 0),
+        Position = UDim2.new(1, -6, 0, 8),
+        Size = UDim2.fromOffset(20, 16),
+        BackgroundColor3 = C.acc,
+        Text = "-", TextSize = 12, Font = FB,
+        TextColor3 = Color3.fromRGB(255,255,255),
+        AutoButtonColor = false, ZIndex = 10,
+    }), 4)
+    local _openSize = root.Size
+    local _minimized = false
     round(mk("Frame", root, {
         AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 30),
         Size = UDim2.fromOffset(56, 2), BackgroundColor3 = C.acc, BorderSizePixel = 0,
@@ -10119,6 +10219,17 @@ _G.MeerkoLate("INVIS", function()
         ScrollingDirection = Enum.ScrollingDirection.Y,
         ZIndex = 2,
     })
+    _openSize = root.Size
+    minBtn.MouseButton1Click:Connect(function()
+        _minimized = not _minimized
+        body.Visible = not _minimized
+        minBtn.Text = _minimized and "+" or "-"
+        if _minimized then
+            root.Size = UDim2.fromOffset(_openSize.X.Offset, 28)
+        else
+            root.Size = _openSize
+        end
+    end)
 
     local refreshAll
 
@@ -10408,7 +10519,7 @@ _G.MeerkoLate("AUTO KICK", function()
     end
     _G.MeerkoKickNow = kickNow
 
-    local W, TOGH, TOP, GAP = 160, 28, 36, 4
+    local W, TOGH, TOP, GAP = 150, 26, 32, 4
     local H = TOP + TOGH * 2 + GAP + 12
     local _vpX, _vpY = 1920, 1080
     pcall(function()
@@ -10449,6 +10560,40 @@ _G.MeerkoLate("AUTO KICK", function()
         BackgroundTransparency = 1, Text = "AUTO KICK", Font = FB, TextSize = 12,
         TextColor3 = C.txt, Active = true,
     })
+    local _minBtn = round(mk("TextButton", root, {
+        AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -6, 0, 8),
+        Size = UDim2.fromOffset(18, 14), BackgroundColor3 = C.acc,
+        Text = "-", TextSize = 11, Font = FB, TextColor3 = Color3.fromRGB(255,255,255),
+        AutoButtonColor = false, ZIndex = 20,
+    }), 4)
+    local _openSz = root.Size
+    local _minOn = false
+    _minBtn.MouseButton1Click:Connect(function()
+        _minOn = not _minOn
+        _minBtn.Text = _minOn and "+" or "-"
+        for _, ch in ipairs(root:GetChildren()) do
+            if ch:IsA("GuiObject") and ch ~= _minBtn and ch.Name ~= "Shadow"
+                and not (ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL") or ch.Text:find("TP") or ch.Text:find("AUTO") or ch.Text:find("INVIS")))
+                and not (ch:IsA("UIStroke") or ch:IsA("UIGradient") or ch:IsA("UICorner")) then
+                if ch.ZIndex and ch.ZIndex < 0 then
+                else
+                    ch.Visible = not _minOn
+                end
+            end
+        end
+        -- keep title visible
+        for _, ch in ipairs(root:GetChildren()) do
+            if ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL TARGET") or ch.Text:find("TP SPEED") or ch.Text:find("AUTO KICK") or ch.Text:find("INVIS")) then
+                ch.Visible = true
+            end
+        end
+        _minBtn.Visible = true
+        if _minOn then
+            root.Size = UDim2.fromOffset(_openSz.X.Offset, 28)
+        else
+            root.Size = _openSz
+        end
+    end)
     mk("Frame", root, {
         Position = UDim2.fromOffset(12, 36), Size = UDim2.new(1, -24, 0, 2),
         BackgroundColor3 = C.line, BorderSizePixel = 0,
@@ -10673,7 +10818,7 @@ _G.MeerkoLate("ANTIFLASHER", function()
         table.clear(hooked)
     end
 
-    local W, TOGH, TOP, GAP = 160, 28, 36, 4
+    local W, TOGH, TOP, GAP = 150, 26, 32, 4
     local H = TOP + TOGH + GAP + 12
     local _vpX, _vpY = 1920, 1080
     pcall(function()
