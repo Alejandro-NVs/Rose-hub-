@@ -7025,7 +7025,7 @@ do
     --    ПРИОРИТИ ЛИСТ    -> своё окно "PR LIST" (кнопка в панели EXTRAS)
     --    кнопка MANUAL TP -> удалена, ручной ТП остался как
     --                        _G.MeerkoStartSideTP()
-    --  Здесь от всей панели живёт панель "666 HACK" сверху экрана -- бывшая
+    --  Здесь от всей панели живёт панель "KAYA PRIVATE" сверху экрана -- бывшая
     --  полоска MEERKO TP. В ней только заголовок и две плитки:
     --    FPS  -- кадров в секунду, среднее за _G.MeerkoOptGap (0.5s)
     --    PING -- Stats.Network.ServerStatsItem["Data Ping"]
@@ -7037,8 +7037,7 @@ do
     -- =================================================================
     -- Панель тоже уезжает в отложенную загрузку: на входе она не нужна,
     -- а строит она ScreenGui и вешает RenderStepped.
-    _G.MeerkoLate("666 HACK", function()
-    -- 666 HACK: panel FPS/PING removed
+    _G.MeerkoLate("KAYA PRIVATE", function()
     local guiParent = (gethui and gethui()) or game:GetService("CoreGui")
     for _, par in ipairs({ guiParent, PG }) do
         pcall(function()
@@ -7327,12 +7326,11 @@ _G.MeerkoLate("TARGETS", function()
     -- Позиция окна помнится в SideTP.json (поля tgtX/tgtY) и на входе зажимается
     -- по вьюпорту: иначе панель, оттащенная за край и сохранённая, после релога
     -- осталась бы за экраном -- мышкой её оттуда уже не достать.
-    local _pw = 200
-    local _tgtX = tonumber(_G._meerko_tgtX) or math.floor((_vpX - _pw) / 2)
-    local _tgtY = tonumber(_G._meerko_tgtY) or math.floor(_vpY * 0.12)
+    local _tgtY = tonumber(_G._meerko_tgtY) or 250
     if _tgtY + _tgtH > _vpY - 20 then _tgtY = math.max(20, _vpY - 20 - _tgtH) end
     if _tgtY < 0 then _tgtY = 0 end
-    if _tgtX + _pw > _vpX - 10 then _tgtX = math.max(10, _vpX - 10 - _pw) end
+    local _tgtX = tonumber(_G._meerko_tgtX) or 24
+    if _tgtX + 288 > _vpX - 10 then _tgtX = math.max(10, _vpX - 10 - 288) end
     if _tgtX < 0 then _tgtX = 0 end
 
     local root = round(mk("Frame", sg, {
@@ -7366,27 +7364,6 @@ _G.MeerkoLate("TARGETS", function()
         BackgroundTransparency = 1, Text = "STEAL TARGET", Font = FBK, TextSize = 12,
         TextColor3 = C.txt, TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 2,
     })
-    local _minBtn = round(mk("TextButton", root, {
-        AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -6, 0, 8),
-        Size = UDim2.fromOffset(18, 14), BackgroundColor3 = C.acc,
-        Text = "-", TextSize = 11, Font = FBK, TextColor3 = Color3.fromRGB(255,255,255),
-        AutoButtonColor = false, ZIndex = 20,
-    }), 4)
-    local _openSz = root.Size
-    local _minOn = false
-    _minBtn.MouseButton1Click:Connect(function()
-        _minOn = not _minOn
-        _minBtn.Text = _minOn and "+" or "-"
-        for _, ch in ipairs(root:GetChildren()) do
-            if ch:IsA("GuiObject") and ch ~= _minBtn and not (ch:IsA("UIStroke") or ch:IsA("UIGradient") or ch:IsA("UICorner")) then
-                if ch:IsA("TextLabel") and ch.Text == "STEAL TARGET" then ch.Visible = true
-                elseif ch.ZIndex and ch.ZIndex < 0 then
-                else ch.Visible = not _minOn end
-            end
-        end
-        _minBtn.Visible = true
-        if _minOn then root.Size = UDim2.fromOffset(_openSz.X.Offset, 28) else root.Size = _openSz end
-    end)
     mk("Frame", root, {
         Position = UDim2.fromOffset(12, 39), Size = UDim2.new(1, -24, 0, 1),
         BackgroundColor3 = C.line, BorderSizePixel = 0,
@@ -8266,15 +8243,9 @@ _G.MeerkoLate("EXTRAS", function()
 
     local root = round(mk("Frame", sg, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
-        Size = UDim2.fromOffset(148, 190),
-        Position = (function()
-            local cam = workspace.CurrentCamera
-            local vx = (cam and cam.ViewportSize.X) or 400
-            local vy = (cam and cam.ViewportSize.Y) or 700
-            local x = tonumber(_G._meerko_exX) or math.floor((vx - 170) / 2)
-            local y = tonumber(_G._meerko_exY) or math.floor(vy * 0.18)
-            return UDim2.fromOffset(x, y)
-        end)(),
+        Size = UDim2.fromOffset(200, 340),
+        Position = UDim2.fromOffset(tonumber(_G._meerko_exX) or 24,
+            tonumber(_G._meerko_exY) or 96),
     }), 14)
     mk("UIGradient", root, {
         Rotation = 135,
@@ -8296,40 +8267,6 @@ _G.MeerkoLate("EXTRAS", function()
         BackgroundTransparency = 1, Text = "EXTRAS", Font = FB, TextSize = 12,
         TextColor3 = C.txt, Active = true,
     })
-    local _minBtn = round(mk("TextButton", root, {
-        AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -6, 0, 8),
-        Size = UDim2.fromOffset(18, 14), BackgroundColor3 = C.acc,
-        Text = "-", TextSize = 11, Font = FB, TextColor3 = Color3.fromRGB(255,255,255),
-        AutoButtonColor = false, ZIndex = 20,
-    }), 4)
-    local _openSz = root.Size
-    local _minOn = false
-    _minBtn.MouseButton1Click:Connect(function()
-        _minOn = not _minOn
-        _minBtn.Text = _minOn and "+" or "-"
-        for _, ch in ipairs(root:GetChildren()) do
-            if ch:IsA("GuiObject") and ch ~= _minBtn and ch.Name ~= "Shadow"
-                and not (ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL") or ch.Text:find("TP") or ch.Text:find("AUTO") or ch.Text:find("INVIS")))
-                and not (ch:IsA("UIStroke") or ch:IsA("UIGradient") or ch:IsA("UICorner")) then
-                if ch.ZIndex and ch.ZIndex < 0 then
-                else
-                    ch.Visible = not _minOn
-                end
-            end
-        end
-        -- keep title visible
-        for _, ch in ipairs(root:GetChildren()) do
-            if ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL TARGET") or ch.Text:find("TP SPEED") or ch.Text:find("AUTO KICK") or ch.Text:find("INVIS")) then
-                ch.Visible = true
-            end
-        end
-        _minBtn.Visible = true
-        if _minOn then
-            root.Size = UDim2.fromOffset(_openSz.X.Offset, 28)
-        else
-            root.Size = _openSz
-        end
-    end)
     mk("Frame", root, {
         Position = UDim2.fromOffset(12, 36), Size = UDim2.new(1, -24, 0, 2),
         BackgroundColor3 = C.line, BorderSizePixel = 0,
@@ -8688,19 +8625,12 @@ _G.MeerkoLate("VEHICLE SELECT", function()
     if not sg.Parent then
         pcall(function() sg.Parent = (gethui and gethui()) or game:GetService("CoreGui") end)
     end
-    local W, ROWH = 150, 24
+    local W, ROWH = 200, 28
     local H = 32 + #CARPET_NAMES * (ROWH + 4) + 8
     local root = round(mk("Frame", sg, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
         Size = UDim2.fromOffset(W, H),
-        Position = (function()
-            local cam = workspace.CurrentCamera
-            local vx = (cam and cam.ViewportSize.X) or 400
-            local vy = (cam and cam.ViewportSize.Y) or 700
-            local x = tonumber(_G._meerko_vsX) or math.floor((vx - 150) / 2)
-            local y = tonumber(_G._meerko_vsY) or math.floor(vy * 0.35)
-            return UDim2.fromOffset(x, y)
-        end)(),
+        Position = UDim2.fromOffset(tonumber(_G._meerko_vsX) or 490, tonumber(_G._meerko_vsY) or 96),
     }), 12)
     mk("UIGradient", root, {
         Rotation = 135,
@@ -8838,15 +8768,8 @@ _G.MeerkoLate("TP BIND", function()
 
     local root2 = rnd(mk2("Frame", sg2, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
-        Size = UDim2.fromOffset(150, 72),
-        Position = (function()
-            local cam = workspace.CurrentCamera
-            local vx = (cam and cam.ViewportSize.X) or 400
-            local vy = (cam and cam.ViewportSize.Y) or 700
-            local x = tonumber(_G._meerko_tbX) or math.floor((vx - 170) / 2)
-            local y = tonumber(_G._meerko_tbY) or math.floor(vy * 0.70)
-            return UDim2.fromOffset(x, y)
-        end)(),
+        Size = UDim2.fromOffset(230, 98),
+        Position = UDim2.fromOffset(tonumber(_G._meerko_tbX) or 270, tonumber(_G._meerko_tbY) or 340),
     }), 14)
     mk2("UIGradient", root2, {
         Rotation = 135,
@@ -9026,14 +8949,8 @@ _G.MeerkoLate("TP SPEED", function()
     local root = round(mk("Frame", sg, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
         Size = UDim2.fromOffset(250, H),
-        Position = (function()
-            local cam = workspace.CurrentCamera
-            local vx = (cam and cam.ViewportSize.X) or 400
-            local vy = (cam and cam.ViewportSize.Y) or 700
-            local x = tonumber(_G._meerko_fX) or math.floor((vx - 170) / 2)
-            local y = tonumber(_G._meerko_fY) or math.floor(vy * 0.28)
-            return UDim2.fromOffset(x, y)
-        end)(),
+        Position = UDim2.fromOffset(tonumber(_G._meerko_fX) or 300,
+            tonumber(_G._meerko_fY) or 96),
     }), 14)
     mk("UIGradient", root, {
         Rotation = 135,
@@ -9055,40 +8972,6 @@ _G.MeerkoLate("TP SPEED", function()
         BackgroundTransparency = 1, Text = "TP SPEED", Font = FB, TextSize = 12,
         TextColor3 = C.txt, Active = true,
     })
-    local _minBtn = round(mk("TextButton", root, {
-        AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -6, 0, 8),
-        Size = UDim2.fromOffset(18, 14), BackgroundColor3 = C.acc,
-        Text = "-", TextSize = 11, Font = FB, TextColor3 = Color3.fromRGB(255,255,255),
-        AutoButtonColor = false, ZIndex = 20,
-    }), 4)
-    local _openSz = root.Size
-    local _minOn = false
-    _minBtn.MouseButton1Click:Connect(function()
-        _minOn = not _minOn
-        _minBtn.Text = _minOn and "+" or "-"
-        for _, ch in ipairs(root:GetChildren()) do
-            if ch:IsA("GuiObject") and ch ~= _minBtn and ch.Name ~= "Shadow"
-                and not (ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL") or ch.Text:find("TP") or ch.Text:find("AUTO") or ch.Text:find("INVIS")))
-                and not (ch:IsA("UIStroke") or ch:IsA("UIGradient") or ch:IsA("UICorner")) then
-                if ch.ZIndex and ch.ZIndex < 0 then
-                else
-                    ch.Visible = not _minOn
-                end
-            end
-        end
-        -- keep title visible
-        for _, ch in ipairs(root:GetChildren()) do
-            if ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL TARGET") or ch.Text:find("TP SPEED") or ch.Text:find("AUTO KICK") or ch.Text:find("INVIS")) then
-                ch.Visible = true
-            end
-        end
-        _minBtn.Visible = true
-        if _minOn then
-            root.Size = UDim2.fromOffset(_openSz.X.Offset, 28)
-        else
-            root.Size = _openSz
-        end
-    end)
     mk("Frame", root, {
         Position = UDim2.fromOffset(12, 36), Size = UDim2.new(1, -24, 0, 2),
         BackgroundColor3 = C.line, BorderSizePixel = 0,
@@ -9272,7 +9155,7 @@ _G.MeerkoLate("PR LIST", function()
     local function round(o, r) mk("UICorner", o, { CornerRadius = UDim.new(0, r or 8) }) return o end
     local function stroke(o, col) mk("UIStroke", o, { Color = col or C.line, Thickness = 1 }) return o end
 
-    local W, H = 165, 220
+    local W, H = 240, 360
     local host = (gethui and gethui()) or game:GetService("CoreGui")
     pcall(function()
         local old = host:FindFirstChild("MeerkoPriList")
@@ -9292,14 +9175,8 @@ _G.MeerkoLate("PR LIST", function()
     local root = round(mk("Frame", sg, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
         Size = UDim2.fromOffset(W, H),
-        Position = (function()
-            local cam = workspace.CurrentCamera
-            local vx = (cam and cam.ViewportSize.X) or 400
-            local vy = (cam and cam.ViewportSize.Y) or 700
-            local x = tonumber(_G._stp_panelX) or math.floor((vx - 200) / 2)
-            local y = tonumber(_G._stp_panelY) or math.floor(vy * 0.22)
-            return UDim2.fromOffset(x, y)
-        end)(),
+        Position = UDim2.fromOffset(tonumber(_G._stp_panelX) or 300,
+            tonumber(_G._stp_panelY) or 160),
     }), 14)
     mk("UIGradient", root, {
         Rotation = 135,
@@ -9608,7 +9485,7 @@ _G.MeerkoLate("TIMER ESP", function()
     if _G.MeerkoTimerESP == nil then _G.MeerkoTimerESP = false end
     _G.MeerkoTimerESP = false
 
-    local W, H = 220, 52
+    local W, H = 300, 64
     local host = (gethui and gethui()) or game:GetService("CoreGui")
     for _, par in ipairs({ host, LP:FindFirstChild("PlayerGui") }) do
         pcall(function()
@@ -10123,7 +10000,7 @@ _G.MeerkoLate("INVIS", function()
         pcall(function() sg.Parent = (gethui and gethui()) or game:GetService("CoreGui") end)
     end
 
-    local TOGH, ROWH, GAP, TOP = 24, 32, 3, 32
+    local TOGH, ROWH, GAP, TOP = 30, 40, 5, 42
     local TOGS = {
         { "INVIS",
           function() return _G.MeerkoInvisActive == true end,
@@ -10153,24 +10030,17 @@ _G.MeerkoLate("INVIS", function()
         { "Depth",            0, 10,  "MeerkoInvisDepth",     0.1, 0.5 },
         { "Auto Invis Delay", 0, 5,   "MeerkoInvisAutoDelay", 0.1, 0.5 },
     }
-    local W = 155
+    local W = 220
     local SLTOP   = TOP + #TOGS * (TOGH + GAP)
     local GRIDTOP = SLTOP + #SLIDERS * ROWH + 4
-    local GRIDH   = 26
+    local GRIDH   = 30
     local GRIDW   = math.floor((W - 24 - GAP) / 2)
-    local contentH = GRIDTOP + GRIDH * 2 + GAP + 8
-    local H = math.min(contentH, 185)
+    local H = GRIDTOP + GRIDH * 2 + GAP + 12
     local root = round(mk("Frame", sg, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
         Size = UDim2.fromOffset(W, H),
-        Position = (function()
-            local cam = workspace.CurrentCamera
-            local vx = (cam and cam.ViewportSize.X) or 400
-            local vy = (cam and cam.ViewportSize.Y) or 700
-            local x = tonumber(_G._meerko_iX) or math.floor((vx - 155) / 2)
-            local y = tonumber(_G._meerko_iY) or math.floor(vy * 0.42)
-            return UDim2.fromOffset(x, y)
-        end)(),
+        Position = UDim2.fromOffset(tonumber(_G._meerko_iX) or 566,
+            tonumber(_G._meerko_iY) or 96),
     }), 14)
     mk("UIGradient", root, {
         Rotation = 135,
@@ -10189,53 +10059,43 @@ _G.MeerkoLate("INVIS", function()
 
     local head = mk("TextLabel", root, {
         Position = UDim2.fromOffset(0, 10), Size = UDim2.new(1, -28, 0, 20),
-        BackgroundTransparency = 1, Text = "INVIS STEAL", Font = FB, TextSize = 11,
+        BackgroundTransparency = 1, Text = "INVIS STEAL", Font = FB, TextSize = 12,
         TextColor3 = C.txt, Active = true,
     })
     local minBtn = round(mk("TextButton", root, {
-        AnchorPoint = Vector2.new(1, 0),
-        Position = UDim2.new(1, -6, 0, 8),
-        Size = UDim2.fromOffset(20, 16),
-        BackgroundColor3 = C.acc,
-        Text = "-", TextSize = 12, Font = FB,
-        TextColor3 = Color3.fromRGB(255,255,255),
-        AutoButtonColor = false, ZIndex = 10,
+        AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -6, 0, 8),
+        Size = UDim2.fromOffset(20, 16), BackgroundColor3 = C.acc,
+        Text = "-", TextSize = 12, Font = FB, TextColor3 = Color3.fromRGB(255,255,255),
+        AutoButtonColor = false, ZIndex = 25,
     }), 4)
-    local _openSize = root.Size
-    local _minimized = false
-    round(mk("Frame", root, {
-        AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 30),
-        Size = UDim2.fromOffset(56, 2), BackgroundColor3 = C.acc, BorderSizePixel = 0,
-    }), 2)
-
-    local body = mk("ScrollingFrame", root, {
-        Position = UDim2.fromOffset(0, 34),
-        Size = UDim2.new(1, 0, 1, -36),
-        BackgroundTransparency = 1,
-        BorderSizePixel = 0,
-        ScrollBarThickness = 3,
-        ScrollBarImageColor3 = C.line,
-        CanvasSize = UDim2.fromOffset(0, (typeof(contentH) == "number" and contentH or 280) - 30),
-        ScrollingDirection = Enum.ScrollingDirection.Y,
-        ZIndex = 2,
-    })
-    _openSize = root.Size
+    local openSize = root.Size
+    local minimized = false
     minBtn.MouseButton1Click:Connect(function()
-        _minimized = not _minimized
-        body.Visible = not _minimized
-        minBtn.Text = _minimized and "+" or "-"
-        if _minimized then
-            root.Size = UDim2.fromOffset(_openSize.X.Offset, 28)
-        else
-            root.Size = _openSize
+        minimized = not minimized
+        minBtn.Text = minimized and "+" or "-"
+        for _, ch in ipairs(root:GetChildren()) do
+            if ch == head or ch == minBtn then
+                ch.Visible = true
+            elseif ch:IsA("UIStroke") or ch:IsA("UIGradient") or ch:IsA("UICorner") then
+            elseif ch:IsA("GuiObject") then
+                if ch.ZIndex and ch.ZIndex < 0 then
+                else
+                    ch.Visible = not minimized
+                end
+            end
         end
+        root.Size = minimized and UDim2.fromOffset(openSize.X.Offset, 30) or openSize
     end)
+    round(mk("Frame", root, {
+        AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 34),
+        Size = UDim2.fromOffset(64, 3), BackgroundColor3 = C.acc, BorderSizePixel = 0,
+    }), 2)
 
     local refreshAll
 
     local function toggleRow(y, title, get, set)
-        local card = round(mk("Frame", body, {
-            Position = UDim2.fromOffset(12, math.max(0, y - 34)), Size = UDim2.new(1, -24, 0, TOGH),
+        local card = round(mk("Frame", root, {
+            Position = UDim2.fromOffset(12, y), Size = UDim2.new(1, -24, 0, TOGH),
             BackgroundColor3 = C.row, BorderSizePixel = 0, Active = true,
         }), 8)
         local st = mk("UIStroke", card, { Color = C.off, Thickness = 1.2, Transparency = 0.35 })
@@ -10268,20 +10128,19 @@ _G.MeerkoLate("INVIS", function()
         return paint
     end
     local function sliderRow(y, title, minV, maxV, key, step, bump)
-        local yy = math.max(0, y - 34)
-        mk("TextLabel", body, {
-            Position = UDim2.fromOffset(12, yy), Size = UDim2.fromOffset(100, 18),
+        mk("TextLabel", root, {
+            Position = UDim2.fromOffset(12, y), Size = UDim2.fromOffset(112, 20),
             BackgroundTransparency = 1, Font = FR, TextSize = 12, TextColor3 = C.dim,
             TextXAlignment = Enum.TextXAlignment.Left, Text = title,
             TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 2,
         })
-        local val = mk("TextLabel", body, {
-            Position = UDim2.fromOffset(110, yy), Size = UDim2.fromOffset(46, 20),
+        local val = mk("TextLabel", root, {
+            Position = UDim2.fromOffset(126, y), Size = UDim2.fromOffset(46, 20),
             BackgroundTransparency = 1, Font = FB, TextSize = 12, TextColor3 = C.txt,
             TextXAlignment = Enum.TextXAlignment.Left, Text = "", ZIndex = 2,
         })
-        local track = round(mk("TextButton", body, {
-            Position = UDim2.fromOffset(12, yy + 22), Size = UDim2.new(1, -24, 0, 8),
+        local track = round(mk("TextButton", root, {
+            Position = UDim2.fromOffset(12, y + 26), Size = UDim2.new(1, -24, 0, 8),
             BackgroundColor3 = C.track, Text = "", AutoButtonColor = false,
             Active = true, BorderSizePixel = 0, ZIndex = 2,
         }), 4)
@@ -10311,8 +10170,8 @@ _G.MeerkoLate("INVIS", function()
             setVal(minV + (maxV - minV) * rel)
         end
         local function bumpBtn(bx, sign, text)
-            local bcard = round(mk("Frame", body, {
-                Position = UDim2.fromOffset(bx, yy), Size = UDim2.fromOffset(28, 20),
+            local bcard = round(mk("Frame", root, {
+                Position = UDim2.fromOffset(bx, y), Size = UDim2.fromOffset(28, 20),
                 BackgroundColor3 = C.row, BorderSizePixel = 0, Active = true,
             }), 6)
             mk("UIStroke", bcard, { Color = C.line, Thickness = 1, Transparency = 0.4 })
@@ -10519,7 +10378,7 @@ _G.MeerkoLate("AUTO KICK", function()
     end
     _G.MeerkoKickNow = kickNow
 
-    local W, TOGH, TOP, GAP = 150, 26, 32, 4
+    local W, TOGH, TOP, GAP = 220, 34, 44, 6
     local H = TOP + TOGH * 2 + GAP + 12
     local _vpX, _vpY = 1920, 1080
     pcall(function()
@@ -10528,11 +10387,8 @@ _G.MeerkoLate("AUTO KICK", function()
             _vpX, _vpY = cam.ViewportSize.X, cam.ViewportSize.Y
         end
     end)
-    local cam = workspace.CurrentCamera
-    local vx = (cam and cam.ViewportSize.X) or 400
-    local vy = (cam and cam.ViewportSize.Y) or 700
-    local akX = tonumber(_G._meerko_akX) or math.floor((vx - 160) / 2)
-    local akY = tonumber(_G._meerko_akY) or math.floor(vy * 0.55)
+    local akX = tonumber(_G._meerko_akX) or 566
+    local akY = tonumber(_G._meerko_akY) or 600
     if akX + W > _vpX - 10 then akX = math.max(10, _vpX - 10 - W) end
     if akY + H > _vpY - 10 then akY = math.max(10, _vpY - 10 - H) end
 
@@ -10560,40 +10416,6 @@ _G.MeerkoLate("AUTO KICK", function()
         BackgroundTransparency = 1, Text = "AUTO KICK", Font = FB, TextSize = 12,
         TextColor3 = C.txt, Active = true,
     })
-    local _minBtn = round(mk("TextButton", root, {
-        AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -6, 0, 8),
-        Size = UDim2.fromOffset(18, 14), BackgroundColor3 = C.acc,
-        Text = "-", TextSize = 11, Font = FB, TextColor3 = Color3.fromRGB(255,255,255),
-        AutoButtonColor = false, ZIndex = 20,
-    }), 4)
-    local _openSz = root.Size
-    local _minOn = false
-    _minBtn.MouseButton1Click:Connect(function()
-        _minOn = not _minOn
-        _minBtn.Text = _minOn and "+" or "-"
-        for _, ch in ipairs(root:GetChildren()) do
-            if ch:IsA("GuiObject") and ch ~= _minBtn and ch.Name ~= "Shadow"
-                and not (ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL") or ch.Text:find("TP") or ch.Text:find("AUTO") or ch.Text:find("INVIS")))
-                and not (ch:IsA("UIStroke") or ch:IsA("UIGradient") or ch:IsA("UICorner")) then
-                if ch.ZIndex and ch.ZIndex < 0 then
-                else
-                    ch.Visible = not _minOn
-                end
-            end
-        end
-        -- keep title visible
-        for _, ch in ipairs(root:GetChildren()) do
-            if ch:IsA("TextLabel") and ch.Text and (ch.Text:find("EXTRAS") or ch.Text:find("STEAL TARGET") or ch.Text:find("TP SPEED") or ch.Text:find("AUTO KICK") or ch.Text:find("INVIS")) then
-                ch.Visible = true
-            end
-        end
-        _minBtn.Visible = true
-        if _minOn then
-            root.Size = UDim2.fromOffset(_openSz.X.Offset, 28)
-        else
-            root.Size = _openSz
-        end
-    end)
     mk("Frame", root, {
         Position = UDim2.fromOffset(12, 36), Size = UDim2.new(1, -24, 0, 2),
         BackgroundColor3 = C.line, BorderSizePixel = 0,
@@ -10818,7 +10640,7 @@ _G.MeerkoLate("ANTIFLASHER", function()
         table.clear(hooked)
     end
 
-    local W, TOGH, TOP, GAP = 150, 26, 32, 4
+    local W, TOGH, TOP, GAP = 220, 34, 44, 6
     local H = TOP + TOGH + GAP + 12
     local _vpX, _vpY = 1920, 1080
     pcall(function()
@@ -10827,11 +10649,8 @@ _G.MeerkoLate("ANTIFLASHER", function()
             _vpX, _vpY = cam.ViewportSize.X, cam.ViewportSize.Y
         end
     end)
-    local cam = workspace.CurrentCamera
-    local vx = (cam and cam.ViewportSize.X) or 400
-    local vy = (cam and cam.ViewportSize.Y) or 700
-    local afX = tonumber(_G._kaya_afX) or math.floor((vx - 160) / 2)
-    local afY = tonumber(_G._kaya_afY) or math.floor(vy * 0.62)
+    local afX = tonumber(_G._kaya_afX) or 566
+    local afY = tonumber(_G._kaya_afY) or 700
     if afX + W > _vpX - 10 then afX = math.max(10, _vpX - 10 - W) end
     if afY + H > _vpY - 10 then afY = math.max(10, _vpY - 10 - H) end
 
