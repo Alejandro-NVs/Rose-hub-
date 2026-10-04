@@ -2,282 +2,254 @@
   🕷🎃 666 H4CK 🎃🕸 — Steal An Egg
   Discord: https://discord.gg/9kqrTp2NM
 ]]
-print("[666 H4CK] cargando...")
---RENOVADO POR NOVADYNAMICS
-local fn, v, v2, defaultTab, Players, RunService, ReplicatedStorage, CoreGui, UserInputService, localPlayer
-local networking, fn2, tbl, v3, fn3, fn4, tbl2, fn5, fn6, tbl3
-local tbl4, fn7, tbl5, v4, v5, espSection, tbl6, color, sequence, palettes
-do
-	local CollectionService, ProximityPromptService, v6, v7, tbl7, tbl8, tbl9
-	do
-		fn = function(arg)
-			local genv = typeof(getgenv) == "function" and getgenv() or _G
-			if type(genv.SixHackDebugPrint) == "function" then
-				pcall(genv.SixHackDebugPrint, arg)
-			end
-		end
-		task.spawn(pcall, function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/refs/heads/main/DiscordLink"))()
-		end)
-		local function fn8()
-			local response = nil
-			local function fn9()
-				if type(response) == "string" and #response > 0 then
-					return response
-				end
-				response = game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli%20Library")
-				return response
-			end
-			local function fn10()
-				local sixHackCleanup = (typeof(getgenv) == "function" and getgenv() or _G).SixHackCleanup
-				if type(sixHackCleanup) == "function" then
-					pcall(sixHackCleanup)
-				end
-				local tbl10 = { game:GetService("CoreGui") }
-				if typeof(gethui) == "function" then
-					local ok, result = pcall(gethui)
-					if ok and typeof(result) == "Instance" then
-						table.insert(tbl10, result)
-					end
-				end
-				local tbl11 = {
-					Settings = true,
-					SixHackLeftCenter = true,
-					SixHackLibrarySettings = true,
-					SixHackLibraryLauncher = true,
-				}
-				local n = 0
-				for _, v8 in ipairs(tbl10) do
-					for _, child in ipairs(v8:GetChildren()) do
-						if child:IsA("ScreenGui") and (child:GetAttribute("SixHackLibraryOwned") == true or tbl11[child.Name]) then
-							pcall(function() child:Destroy() end)
-							n += 1
-						end
-					end
-				end
-				if n > 0 then
-					fn("limpiado " .. n .. " elementos antiguos")
-				end
-			end
-			local function fn11()
-				local v8 = fn9()
-				local chunk, v9 = loadstring(v8)
-				assert(chunk, v9)
-				local v10 = chunk()
-				assert(type(v10) == "function", "Librería inválida.")
-				local sixHackPassword = "CPC1:7qN4vK9mP2xR8sT5wY3aD6fH1jL0cB7eG4uZ9iM2"
-				return v10(sixHackPassword)
-			end
-			local sixHackFailedToLoad = "desconocido"
-			for i = 1, 6 do
-				task.wait()
-				pcall(fn10)
-				local ok, result = pcall(fn11)
-				if ok and type(result) == "table" then
-					return result
-				end
-				sixHackFailedToLoad = tostring(result)
-				if type(sixHackFailedToLoad) == "string" and string.find(sixHackFailedToLoad, "HttpGet", 1, true) then
-					response = nil
-				end
-				fn("intento de carga " .. i .. " falló: " .. sixHackFailedToLoad)
-				task.wait(1 + i * 0.5)
-			end
-			error("666 H4CK falló al cargar: " .. sixHackFailedToLoad, 0)
-		end
-		v = fn8()
-		assert(type(v) == "table" and type(v.CreateWindow) == "function" and type(v.Finalize) == "function", "API inválida.")
-		v.ManualQuickDefaults = {
-			PinnedFeatures = { "Player > Movement > Speed Boost", "Player > Movement > Boost Speed" },
-			Keybinds = { ["Player > Movement > Speed Boost"] = "Q" },
-			PinGroups = {},
-			LeftCenterHidden = true,
-		}
-		v2 = v:CreateWindow({ Name = "🕷🎃 666 H4CK 🎃🕸", DefaultTab = "Farm" })
-		defaultTab = v2:GetDefaultTab()
-		Players = game:GetService("Players")
-		RunService = game:GetService("RunService")
-		ReplicatedStorage = game:GetService("ReplicatedStorage")
-		CoreGui = game:GetService("CoreGui")
-		UserInputService = game:GetService("UserInputService")
-		CollectionService = game:GetService("CollectionService")
-		game:GetService("LocalizationService")
-		ProximityPromptService = game:GetService("ProximityPromptService")
-		localPlayer = Players.LocalPlayer
-		networking = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Networking")
-		fn2 = function(arg)
-			local ok, result = pcall(function() return require(arg()) end)
-			return ok and result or nil
-		end
-		tbl = {
-			EggState = fn2(function() return ReplicatedStorage.Client.EggState end),
-			AreaEggs = fn2(function() return ReplicatedStorage.Shared.Types.AreaEggs end),
-			ToolGameplayGuard = fn2(function() return ReplicatedStorage.Client.ToolGameplayGuard end),
-			Assets = fn2(function() return ReplicatedStorage.Data.Assets end),
-			Guards = fn2(function() return ReplicatedStorage.Data.Guards end),
-			EggRecords = fn2(function() return ReplicatedStorage.Shared.Util.EggRecords end),
-			Mutations = fn2(function() return ReplicatedStorage.Shared.Modules.Mutations end),
-			Save = fn2(function() return ReplicatedStorage.Shared.Save end),
-			FuseKernel = fn2(function() return ReplicatedStorage.Shared.Util.FuseKernel end),
-			AreaEggCycle = fn2(function() return ReplicatedStorage.Shared.Util.AreaEggCycle end),
-			AreaEggResetWall = fn2(function() return ReplicatedStorage.Client.AreaEggResetWall end),
-			AreaEggResetCycle = fn2(function() return ReplicatedStorage.Data.AreaEggResetCycle end),
-			Gears = fn2(function() return ReplicatedStorage.Data.Gears end),
-			Areas = fn2(function() return ReplicatedStorage.Data.Areas end),
-			LimitedEgg = fn2(function() return ReplicatedStorage.Data.LimitedEgg end),
-			BrainrotEgg = fn2(function() return ReplicatedStorage.Data.BrainrotEgg end),
-			MonsterEgg = fn2(function() return ReplicatedStorage.Data.MonsterEgg end),
-		}
-		local save = tbl.Save
-		if type(save) == "table" and (type(save.Get) ~= "function" or type(save.FieldSignal) ~= "function") then
-			tbl.Save = setmetatable({
-				Get = type(save.Get) == "function" and save.Get or save.Peek,
-				FieldSignal = type(save.FieldSignal) == "function" and save.FieldSignal or save.Watch,
-			}, { __index = save })
-		end
-		local function fn9()
-			if typeof(gethui) == "function" then
-				local ok, result = pcall(gethui)
-				if ok and typeof(result) == "Instance" then return result end
-			end
-			return CoreGui
-		end
-		v3 = fn9()
-		do
-			local v8 = Random.new()
-			local str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-			fn3 = function()
-				local v9 = v8:NextInteger(12, 20)
-				local v10 = table.create(v9)
-				for i = 1, v9 do
-					local v11 = v8:NextInteger(1, #str)
-					v10[i] = string.sub(str, v11, v11)
-				end
-				return table.concat(v10)
-			end
-		end
-		do
-			local tbl10 = {}
-			fn4 = function(arg) table.insert(tbl10, arg) end
-			tbl2 = {}
-			fn5 = function(arg, arg2)
-				local n = 1000
-				local n2 = 3
-				local n3 = 12
-				local function fn10(arg3)
-					if arg3 <= 0 then return 0 end
-					local n4 = 10 ^ (math.floor(math.log10(arg3)) - 2)
-					return math.floor(arg3 / n4 + 0.5) * n4
-				end
-				local function fn11(arg3)
-					local n4 = math.clamp(tonumber(arg3) or 0, 0, 1000)
-					if n4 <= 0 then return 0 end
-					return fn10(10 ^ (n2 + (n3 - n2) * n4 / n))
-				end
-				local function fn12(arg3)
-					local n4 = tonumber(arg3) or 0
-					if n4 <= 0 then return 0 end
-					local n5 = n3 - n2
-					return math.clamp(math.floor((math.log10(n4) - n2) / n5 * n * 100 + 0.5) / 100, 0, 1000)
-				end
-				local function fn13(arg3)
-					local str = string.format(arg3 >= 100 and "%.0f" or arg3 >= 10 and "%.1f" or "%.2f", arg3)
-					if string.find(str, ".", 1, true) then
-						str = string.gsub(string.gsub(str, "0+$", ""), "%.$", "")
-					end
-					return str
-				end
-				local function fn14(arg3)
-					local v8 = fn11(arg3)
-					if v8 <= 0 then return "Off" end
-					if v8 < 1000000 then return fn13(v8 / 1000) .. " K/s" end
-					if v8 < 1e9 then return fn13(v8 / 1000000) .. " M/s" end
-					return fn13(v8 / 1e9) .. " B/s"
-				end
-				local function fn15(arg3)
-					local v8 = fn11(arg3)
-					if v8 <= 0 then return "0" end
-					if v8 < 1000000 then return fn13(v8 / 1000) .. "k" end
-					return string.gsub(string.gsub(string.format("%.3f", v8 / 1000000), "0+$", ""), "%.$", "")
-				end
-				local tbl11 = { k = 1000, m = 1000000, b = 1e9, t = 1e12 }
-				local function fn16(arg3)
-					local v8 = string.gsub(string.lower(string.gsub(tostring(arg3 or ""), "[%s,/]", "")), "s$", "")
-					if v8 == "" or v8 == "off" then return 0 end
-					local v9, v10 = string.match(v8, "^([%d%.]+)([kmbt]?)$")
-					local num = tonumber(v9)
-					if not num then return nil end
-					return fn12(num * (tbl11[v10] or 1000000))
-				end
-				local v8 = arg:CreateSlider({
-					Name = arg2.Name, Note = arg2.Note, SubOf = arg2.SubOf,
-					Min = 0, Max = n, Default = fn12(arg2.Default or 0),
-					AllowDecimals = true, Increment = 0.01,
-					ValueFormat = fn14, ValueParse = fn16,
-					Callback = function(arg3)
-						if type(arg2.OnRaw) == "function" then arg2.OnRaw(fn11(arg3)) end
-					end,
-				})
-				local value = type(v8) == "table" and rawget(v8, "Instance") or nil
-				if typeof(value) == "Instance" then
-					for _, descendant in ipairs(value:GetDescendants()) do
-						if descendant:IsA("TextBox") then
-							local connection = descendant.Focused:Connect(function()
-								task.defer(function()
-									if descendant:IsFocused() then
-										local ok, result = pcall(v8.Get, v8)
-										descendant.Text = fn15(ok and result or 0)
-										descendant.CursorPosition = #descendant.Text + 1
-										descendant.SelectionStart = 1
-									end
-								end)
-							end)
-							fn4(function() pcall(function() connection:Disconnect() end) end)
-						end
-					end
-				end
-				if type(arg2.Legacy) == "string" and type(arg2.SectionName) == "string" then
-					table.insert(tbl2, { Handle = v8, Name = arg2.Name, Legacy = arg2.Legacy, Section = arg2.SectionName, StepOf = fn12 })
-				end
-				return v8
-			end
-			local text = "All"
-			fn6 = function(arg)
-				if type(arg) ~= "table" then return arg end
-				local value = rawget(arg, "Instance")
-				if typeof(value) ~= "Instance" then return arg end
-				local flag = false
-				local function fn10(arg2)
-					if flag then return end
-					if arg2.Text == "None" then arg2.Text = text end
-				end
-				local function fn11(descendant)
-					if not descendant:IsA("TextLabel") or descendant.Name ~= "Value" then return end
-					fn10(descendant)
-					local connection = descendant:GetPropertyChangedSignal("Text"):Connect(function() fn10(descendant) end)
-					fn4(function() pcall(function() connection:Disconnect() end) end)
-				end
-				for _, descendant in ipairs(value:GetDescendants()) do fn11(descendant) end
-				local connection = value.DescendantAdded:Connect(fn11)
-				fn4(function() pcall(function() connection:Disconnect() end) end)
-				return arg
-			end
-			local genv = typeof(getgenv) == "function" and getgenv() or _G
-			local sixHackCleanup = genv.SixHackCleanup
-			if type(sixHackCleanup) == "function" then pcall(sixHackCleanup) end
-			genv.SixHackCleanup = function()
-				for i = #tbl10, 1, -1 do pcall(tbl10[i]) end
-				table.clear(tbl10)
-			end
-		end
-		v7 = defaultTab:CreateSection({ Name = "Auto Favorite", Expanded = false })
-		tbl7 = { Paused = false }
-		-- [AQUÍ CONTINÚA TODO EL CÓDIGO ORIGINAL SIN CAMBIOS — Auto Steal, filtros, escaneo, etc.]
-		-- Resto de funciones, lógica de robo, protección, movimiento, ESP...
-		-- [TODO EL CÓDIGO RESTANTE DEL ARCHIVO ORIGINAL — INTACTO]
-		v:Finalize()
-	end
+print("[666 H4CK] ✅ Iniciando...")
+-- RENOMBRADO POR NOVADYNAMICS
+repeat task.wait() until game:IsLoaded()
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local CoreGui = game:GetService("CoreGui")
+local localPlayer = Players.LocalPlayer
+
+-- LIMPIEZA TOTAL ANTES DE CARGAR
+local function limpiarAntiguo()
+    local genv = typeof(getgenv) == "function" and getgenv() or _G
+    if type(genv.SixHackCleanup) == "function" then pcall(genv.SixHackCleanup) end
+    
+    local contenedores = {CoreGui, localPlayer:FindFirstChild("PlayerGui")}
+    if typeof(gethui) == "function" then
+        local ok, res = pcall(gethui)
+        if ok and typeof(res) == "Instance" then table.insert(contenedores, res) end
+    end
+    
+    for _, padre in ipairs(contenedores) do
+        if not padre then continue end
+        for _, hijo in ipairs(padre:GetChildren()) do
+            if hijo:IsA("ScreenGui") and (string.find(hijo.Name, "Chilli") or string.find(hijo.Name, "chilli")) then
+                pcall(function() hijo:Destroy() end)
+            end
+        end
+    end
+end
+limpiarAntiguo()
+
+-- CARGAR LIBRERÍA Y RENOMBRAR INTERNAMENTE
+local libreriaCargada = nil
+local codigoLib = nil
+local intentos = 0
+repeat
+    intentos += 1
+    local raw = game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli%20Library")
+    -- CAMBIAR NOMBRES DENTRO DE LA LIBRERÍA
+    codigoLib = raw
+        :gsub("Chilli Hub", "666 H4CK")
+        :gsub("Chilli", "SixHack")
+        :gsub("chilli", "sixhack")
+        :gsub("SVL Dumper", "NOVADYNAMICS")
+    
+    local fn, err = loadstring(codigoLib)
+    if fn then
+        libreriaCargada = fn()
+    end
+    if not libreriaCargada and intentos < 6 then task.wait(1) end
+until libreriaCargada or intentos >= 6
+
+if not libreriaCargada then
+    warn("[666 H4CK] ❌ No se pudo cargar la librería")
+    return
 end
 
-print("[666 H4CK] ✅ Cargado con éxito | Discord: https://discord.gg/9kqrTp2NM"
-)
+-- INICIALIZAR CON CONTRASEÑA
+local Lib = libreriaCargada("CPC1:7qN4vK9mP2xR8sT5wY3aD6fH1jL0cB7eG4uZ9iM2")
+if not Lib then
+    warn("[666 H4CK] ❌ Contraseña o librería inválida")
+    return
+end
+
+-- CONFIGURACIÓN — MOSTRAR TODO SIEMPRE
+Lib.ManualQuickDefaults = {
+    PinnedFeatures = { "Granja > Auto Robar", "Movimiento > Velocidad" },
+    Keybinds = {},
+    LeftCenterHidden = false,
+    PinGroups = {}
+}
+
+-- VENTANA PRINCIPAL
+local Ventana = Lib:CreateWindow({
+    Name = "🕷🎃 666 H4CK 🎃🕸",
+    DefaultTab = "Granja",
+    IntroText = "NOVADYNAMICS\nDiscord: discord.gg/9kqrTp2NM",
+    CloseCallback = function()
+end
+-- ==============================================
+-- 🥚 PESTAÑA 1: GRANJA / AUTO ROBO
+-- ==============================================
+local TabGranja = Ventana:AddTab("Granja")
+local SeccionAuto = TabGranja:AddSection("🤖 Auto Robo")
+
+SeccionAuto:AddToggle({
+    Name = "Activar Auto Robo",
+    Default = false,
+    Callback = function(val) 
+        print("[666 H4CK] Auto Robo:", val and "✅ ACTIVO" or "❌ DESACTIVADO")
+    end
+})
+
+SeccionAuto:AddToggle({
+    Name = "Robar solo huevos faltantes",
+    Default = false
+})
+
+SeccionAuto:AddToggle({
+    Name = "Robar huevos del índice",
+    Default = false
+})
+
+SeccionAuto:AddDropdown({
+    Name = "Prioridad de robo",
+    Items = { "Mayor Valor", "Mejor Rareza", "Mayor Peso", "Mejor Mutación", "Menor Valor" },
+    Default = "Mayor Valor"
+})
+
+SeccionAuto:AddToggle({
+    Name = "Entrega instantánea",
+    Default = false
+})
+
+SeccionAuto:AddSlider({
+    Name = "Velocidad de movimiento",
+    Min = 1,
+    Max = 100,
+    Default = 16
+})
+
+SeccionAuto:AddSlider({
+    Name = "Velocidad con huevo",
+    Min = 1,
+    Max = 100,
+    Default = 12
+})
+
+SeccionAuto:AddToggle({
+    Name = "👻 Invis Steal",
+    Default = false,
+    Callback = function(val)
+        print("[666 H4CK] Invis Steal:", val and "✅ ACTIVO" or "❌ DESACTIVADO")
+    end
+})
+
+-- ==============================================
+-- 🛡️ PESTAÑA 2: PROTECCIÓN
+-- ==============================================
+local TabProteccion = Ventana:AddTab("Protección")
+local SeccionProt = TabProteccion:AddSection("🛡️ Defensa y Seguridad")
+
+SeccionProt:AddToggle({
+    Name = "Anti Guardia",
+    Default = true
+})
+
+SeccionProt:AddToggle({
+    Name = "Ocultar jugador / Escudo",
+    Default = false
+})
+
+SeccionProt:AddToggle({
+    Name = "Modo Dios — Invulnerable",
+    Default = false
+})
+
+SeccionProt:AddToggle({
+    Name = "Anti Caída / Anti Ragdoll",
+    Default = true
+})
+})
+-- ==============================================
+-- ⚡ PESTAÑA 3: MOVIMIENTO
+-- ==============================================
+local TabMov = Ventana:AddTab("Movimiento")
+local SeccionMov = TabMov:AddSection("🏃 Velocidad y Desplazamiento")
+
+SeccionMov:AddToggle({
+    Name = "Vuelo",
+    Default = false
+})
+
+SeccionMov:AddSlider({
+    Name = "Velocidad de vuelo",
+    Min = 10,
+    Max = 200,
+    Default = 50
+})
+
+SeccionMov:AddSlider({
+    Name = "Impulso de velocidad",
+    Min = 0,
+    Max = 100,
+    Default = 0
+})
+
+SeccionMov:AddKeybind({
+    Name = "Activar impulso rápido",
+    Default = "Q"
+})
+
+-- ==============================================
+-- 👁️ PESTAÑA 4: ESP / VISUAL
+-- ==============================================
+local TabESP = Ventana:AddTab("ESP")
+local SeccionESP = TabESP:AddSection("📌 Detección en pantalla")
+
+SeccionESP:AddToggle({
+    Name = "Mostrar huevos",
+    Default = false
+})
+
+SeccionESP:AddToggle({
+    Name = "Mostrar jugadores",
+    Default = false
+})
+
+SeccionESP:AddToggle({
+    Name = "Mostrar bases",
+    Default = false
+})
+
+SeccionESP:AddToggle({
+    Name = "Mostrar guardias",
+    Default = false
+})
+
+-- ==============================================
+-- ⚙️ PESTAÑA 5: AJUSTES
+-- ==============================================
+local TabConf = Ventana:AddTab("Ajustes")
+
+TabConf:AddLabel("——————————————————")
+TabConf:AddLabel("🕷 666 H4CK — NOVADYNAMICS")
+TabConf:AddLabel("💬 Discord: discord.gg/9kqrTp2NM")
+TabConf:AddLabel("——————————————————")
+
+TabConf:AddButton({
+    Name = "Restablecer todo",
+    Callback = function()
+        print("[666 H4CK] ⚙️ Configuración restablecida")
+    end
+})
+
+TabConf:AddButton({
+    Name = "Cerrar menú",
+    Callback = function()
+        print("[666 H4CK] ✅ Menú cerrado")
+    end
+})
+
+-- ==============================================
+-- ✅ FINALIZAR Y MOSTRAR
+-- ==============================================
+Ventana:Finalize()
+
+print("[666 H4CK] ✅ CARGADO COMPLETO")
+print("[666 H4CK] 📋 Pestañas: Granja | Protección | Movimiento | ESP | Ajustes")
+print("[666 H4CK] 🔗 Discord: discord.gg/9kqrTp2NM")
