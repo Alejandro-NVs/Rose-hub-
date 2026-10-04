@@ -1,3 +1,221 @@
+repeat task.wait() until game:IsLoaded()
+
+-- ===================== 666 HACK - ON TOP =====================
+do
+	local Players = game:GetService("Players")
+	local LP2 = Players.LocalPlayer
+	local TweenService2 = game:GetService("TweenService")
+	local SoundService2 = game:GetService("SoundService")
+
+	local splashGui = Instance.new("ScreenGui")
+	splashGui.Name = "666_H4CK"
+	splashGui.ResetOnSpawn = false
+	splashGui.DisplayOrder = 999
+	splashGui.IgnoreGuiInset = true
+	if not pcall(function() splashGui.Parent = game:GetService("CoreGui") end) then
+		splashGui.Parent = LP2:WaitForChild("PlayerGui")
+	end
+
+	local overlay = Instance.new("Frame", splashGui)
+	overlay.Size = UDim2.new(1,0,1,0)
+	overlay.BackgroundColor3 = Color3.fromRGB(0,0,0)
+	overlay.BackgroundTransparency = 0
+	overlay.BorderSizePixel = 0
+	overlay.ZIndex = 1
+
+	local tapHint = Instance.new("TextLabel", splashGui)
+	tapHint.Size = UDim2.new(1, 0, 0, 20)
+	tapHint.Position = UDim2.new(0, 0, 1, -36)
+	tapHint.BackgroundTransparency = 1
+	tapHint.Text = "toca en cualquier lugar para saltar"
+	tapHint.TextColor3 = Color3.fromRGB(255, 80, 80)
+	tapHint.Font = Enum.Font.Gotham
+	tapHint.TextSize = 11
+	tapHint.ZIndex = 10
+	tapHint.TextXAlignment = Enum.TextXAlignment.Center
+
+	local skipZone = Instance.new("TextButton", splashGui)
+	skipZone.Size = UDim2.new(1,0,1,0)
+	skipZone.BackgroundTransparency = 1
+	skipZone.Text = ""
+	skipZone.ZIndex = 9
+
+	local container = Instance.new("Frame", splashGui)
+	container.Size = UDim2.new(0,320,0,120)
+	container.Position = UDim2.new(0.5,-160,0,-140)
+	container.BackgroundTransparency = 1
+	container.BorderSizePixel = 0
+	container.ZIndex = 2
+	container.ClipsDescendants = false
+
+	local titleSplash = Instance.new("TextLabel", container)
+	titleSplash.Size = UDim2.new(1,0,0,70)
+	titleSplash.Position = UDim2.new(0,0,0,0)
+	titleSplash.BackgroundTransparency = 1
+	titleSplash.Text = "666 HACK"
+	titleSplash.TextColor3 = Color3.fromRGB(255, 255, 255)
+	titleSplash.Font = Enum.Font.GothamBlack
+	titleSplash.TextSize = 48
+	titleSplash.TextTransparency = 0
+	titleSplash.ZIndex = 3
+	do
+		local g = Instance.new("UIGradient", titleSplash)
+		g.Color = ColorSequence.new({
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(200, 0, 0)),
+			ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 60, 60)),
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 0, 0))
+		})
+	end
+
+	local subSplash = Instance.new("TextLabel", container)
+	subSplash.Size = UDim2.new(1,0,0,24)
+	subSplash.Position = UDim2.new(0,0,0,72)
+	subSplash.BackgroundTransparency = 1
+	subSplash.Text = "Discord: discord.gg/kZ6j2vpkX"
+	subSplash.TextColor3 = Color3.fromRGB(255, 100, 100)
+	subSplash.Font = Enum.Font.Gotham
+	subSplash.TextSize = 13
+	subSplash.TextTransparency = 0
+	subSplash.ZIndex = 3
+
+	local fragments = {}
+	local fragTexts = {"666"," ","HAC","K  "}
+	local fragColors = {
+		Color3.fromRGB(200, 0, 0),
+		Color3.fromRGB(255, 40, 40),
+		Color3.fromRGB(255, 0, 0),
+		Color3.fromRGB(200, 0, 0)
+	}
+	for i, txt in ipairs(fragTexts) do
+		local frag = Instance.new("TextLabel", splashGui)
+		frag.Size = UDim2.new(0,90,0,60)
+		frag.AnchorPoint = Vector2.new(0.5,0.5)
+		frag.Position = UDim2.new(0.5, (i-2.5)*52, 0.5, -30)
+		frag.BackgroundTransparency = 1
+		frag.Text = txt
+		frag.TextColor3 = fragColors[i]
+		frag.Font = Enum.Font.GothamBlack
+		frag.TextSize = 44
+		frag.TextTransparency = 1
+		frag.ZIndex = 5
+		frag.Rotation = 0
+		table.insert(fragments, frag)
+	end
+
+	local function playSound(id, pitch, vol, parent, delay)
+		task.delay(delay or 0, function()
+			local s = Instance.new("Sound")
+			s.SoundId = id
+			s.PlaybackSpeed = pitch
+			s.Volume = vol
+			s.Parent = parent
+			s.RollOffMaxDistance = 0
+			s:Play()
+			game:GetService("Debris"):AddItem(s, 3)
+		end)
+	end
+
+	local function playGlitchImpact()
+		playSound("rbxassetid://1588058260", 1.0, 0.9, SoundService2, 0)
+		playSound("rbxassetid://8627516764", 0.8, 0.7, SoundService2, 0.02)
+		playSound("rbxassetid://1588058260", 1.4, 0.5, SoundService2, 0.05)
+		playSound("rbxassetid://8627516764", 1.2, 0.4, SoundService2, 0.1)
+	end
+
+	local function playWhistle()
+		local WHISTLE_ID = "rbxassetid://4612414100"
+		playSound(WHISTLE_ID, 2.2, 0.7, SoundService2, 0)
+		playSound(WHISTLE_ID, 1.7, 0.8, SoundService2, 0.07)
+		playSound(WHISTLE_ID, 1.2, 0.9, SoundService2, 0.15)
+		playSound(WHISTLE_ID, 0.85, 0.9, SoundService2, 0.24)
+		playSound(WHISTLE_ID, 0.55, 0.7, SoundService2, 0.34)
+		playSound(WHISTLE_ID, 0.3, 1.0, SoundService2, 0.5)
+	end
+
+	local function doShatterEffect()
+		pcall(playGlitchImpact)
+		local flash = Instance.new("Frame", splashGui)
+		flash.Size = UDim2.new(1,0,1,0)
+		flash.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+		flash.BackgroundTransparency = 0.3
+		flash.BorderSizePixel = 0
+		flash.ZIndex = 8
+		TweenService2:Create(flash, TweenInfo.new(0.18), {BackgroundTransparency=1}):Play()
+		game:GetService("Debris"):AddItem(flash, 0.3)
+		titleSplash.TextTransparency = 1
+		local RunService2 = game:GetService("RunService")
+		for i, frag in ipairs(fragments) do
+			frag.TextTransparency = 0
+			local dirX = (i - 2.5) * 60 + math.random(-80, 80)
+			local dirY = math.random(120, 280)
+			local rot = math.random(-180, 180)
+			local startPosX = frag.Position.X.Offset
+			local startPosY = frag.Position.Y.Offset
+			local t = 0
+			local conn
+			conn = RunService2.RenderStepped:Connect(function(dt)
+				t = t + dt
+				if t > 0.8 then frag.TextTransparency = 1; conn:Disconnect(); return end
+				local alpha = t / 0.8
+				local px = startPosX + dirX * alpha
+				local py = startPosY - dirY * alpha + 300 * alpha * alpha
+				local fade = math.clamp(alpha * 1.4 - 0.3, 0, 1)
+				frag.Position = UDim2.new(0.5, px, 0.5, py - 30)
+				frag.Rotation = rot * alpha
+				frag.TextTransparency = fade
+				frag.TextSize = math.clamp(44 - alpha * 20, 10, 44)
+			end)
+		end
+		for li = 1, 8 do
+			task.delay(li * 0.025, function()
+				local line = Instance.new("Frame", splashGui)
+				line.Size = UDim2.new(1, 0, 0, math.random(2,6))
+				line.Position = UDim2.new(0, 0, math.random(), 0)
+				line.BackgroundColor3 = Color3.fromRGB(255, math.random(0,60), math.random(0,60))
+				line.BackgroundTransparency = math.random() * 0.3
+				line.BorderSizePixel = 0
+				line.ZIndex = 7
+				TweenService2:Create(line, TweenInfo.new(0.12), {BackgroundTransparency=1}):Play()
+				game:GetService("Debris"):AddItem(line, 0.2)
+			end)
+		end
+	end
+
+	local splashDone = false
+	local function finishSplash()
+		if splashDone then return end
+		splashDone = true
+		TweenService2:Create(subSplash, TweenInfo.new(0.3), {TextTransparency=1}):Play()
+		TweenService2:Create(overlay, TweenInfo.new(0.4), {BackgroundTransparency=1}):Play()
+		tapHint.Visible = false
+	end
+
+	skipZone.MouseButton1Click:Connect(function()
+		titleSplash.TextTransparency = 1
+		subSplash.TextTransparency = 1
+		finishSplash()
+	end)
+
+	task.spawn(function()
+		TweenService2:Create(overlay, TweenInfo.new(0.2), {BackgroundTransparency=0.1}):Play()
+		task.wait(0.15)
+		pcall(playWhistle)
+		TweenService2:Create(container, TweenInfo.new(0.45, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out),
+			{Position=UDim2.new(0.5,-160,0.5,-60)}):Play()
+		task.wait(0.5)
+		doShatterEffect()
+		task.wait(0.85)
+		finishSplash()
+		task.wait(0.45)
+		if splashGui and splashGui.Parent then splashGui:Destroy() end
+	end)
+
+	local _t0 = tick()
+	while not splashDone and (tick() - _t0) < 3.0 do
+		task.wait(0.05)
+	end
+end
+
 --// 666 HACK LOADER
 
 if _G.KayaLoaderRunning then return end
