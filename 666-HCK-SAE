@@ -1,23 +1,45 @@
 --[[
-  🕷🎃 666 H4CK 🎃🕸 — Steal An Egg
-  Discord: https://discord.gg/9kqrTp2NM
+    🕷🎃 666 H4CK — PRO EDITION
+    ✨ Mejorado: Diseño, Velocidad, Estabilidad
+    🔗 Discord: https://discord.gg/9kqrTp2NM
+    💀 NOVADYNAMICS © 2026
 ]]
-print("[666 H4CK] ✅ Iniciando...")
--- RENOMBRADO POR NOVADYNAMICS
+
+print("[666 H4CK] ═══════════════════════")
+print("[666 H4CK] 🔥 INICIANDO VERSIÓN PRO")
+print("[666 H4CK] ═══════════════════════")
+
 repeat task.wait() until game:IsLoaded()
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local SoundService = game:GetService("SoundService")
 local CoreGui = game:GetService("CoreGui")
 local localPlayer = Players.LocalPlayer
 
--- LIMPIEZA TOTAL ANTES DE CARGAR
-local function limpiarAntiguo()
+-- 🔊 SONIDO AL INICIAR
+local function sonidoInicio()
+    pcall(function()
+        local s = Instance.new("Sound")
+        s.SoundId = "rbxassetid://6895079853"
+        s.Volume = 0.4
+        s.Pitch = 1.2
+        s.Parent = SoundService
+        s:Play()
+        game:GetService("Debris"):AddItem(s, 2)
+    end)
+end
+
+-- 🧹 LIMPIEZA PROFUNDA
+local function limpiarTodo()
     local genv = typeof(getgenv) == "function" and getgenv() or _G
     if type(genv.SixHackCleanup) == "function" then pcall(genv.SixHackCleanup) end
     
-    local contenedores = {CoreGui, localPlayer:FindFirstChild("PlayerGui")}
+    local contenedores = {CoreGui}
+    if localPlayer and localPlayer:FindFirstChild("PlayerGui") then
+        table.insert(contenedores, localPlayer.PlayerGui)
+    end
     if typeof(gethui) == "function" then
         local ok, res = pcall(gethui)
         if ok and typeof(res) == "Instance" then table.insert(contenedores, res) end
@@ -26,230 +48,184 @@ local function limpiarAntiguo()
     for _, padre in ipairs(contenedores) do
         if not padre then continue end
         for _, hijo in ipairs(padre:GetChildren()) do
-            if hijo:IsA("ScreenGui") and (string.find(hijo.Name, "Chilli") or string.find(hijo.Name, "chilli")) then
-                pcall(function() hijo:Destroy() end)
+            if hijo:IsA("ScreenGui") then
+                local nom = hijo.Name:lower()
+                if nom:find("chilli") or nom:find("sae") then
+                    pcall(function() hijo:Destroy() end)
+                end
             end
         end
     end
 end
-limpiarAntiguo()
+limpiarTodo()
 
--- CARGAR LIBRERÍA Y RENOMBRAR INTERNAMENTE
-local libreriaCargada = nil
-local codigoLib = nil
+-- 📦 CARGAR Y RENOMBRAR LIBRERÍA
+local Lib = nil
 local intentos = 0
 repeat
     intentos += 1
-    local raw = game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli%20Library")
-    -- CAMBIAR NOMBRES DENTRO DE LA LIBRERÍA
-    codigoLib = raw
+    local codigo = game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli%20Library")
+    
+    -- REEMPLAZO TOTAL DE NOMBRES
+    codigo = codigo
         :gsub("Chilli Hub", "666 H4CK")
         :gsub("Chilli", "SixHack")
         :gsub("chilli", "sixhack")
         :gsub("SVL Dumper", "NOVADYNAMICS")
+        :gsub("Steal An Egg", "Auto Brainrot")
     
-    local fn, err = loadstring(codigoLib)
+    local fn, err = loadstring(codigo)
     if fn then
-        libreriaCargada = fn()
+        local lib = fn()
+        if type(lib) == "function" then
+            Lib = lib("CPC1:7qN4vK9mP2xR8sT5wY3aD6fH1jL0cB7eG4uZ9iM2")
+        end
     end
-    if not libreriaCargada and intentos < 6 then task.wait(1) end
-until libreriaCargada or intentos >= 6
+    if not Lib and intentos < 5 then task.wait(0.8) end
+until Lib or intentos >= 5
 
-if not libreriaCargada then
-    warn("[666 H4CK] ❌ No se pudo cargar la librería")
-    return
-end
-
--- INICIALIZAR CON CONTRASEÑA
-local Lib = libreriaCargada("CPC1:7qN4vK9mP2xR8sT5wY3aD6fH1jL0cB7eG4uZ9iM2")
 if not Lib then
-    warn("[666 H4CK] ❌ Contraseña o librería inválida")
+    warn("[666 H4CK] ❌ Error de carga")
     return
 end
 
--- CONFIGURACIÓN — MOSTRAR TODO SIEMPRE
+sonidoInicio()
+
+-- ⚙️ CONFIGURACIÓN PRO
 Lib.ManualQuickDefaults = {
-    PinnedFeatures = { "Granja > Auto Robar", "Movimiento > Velocidad" },
-    Keybinds = {},
+    PinnedFeatures = {
+        "Granja > Auto Robo",
+        "Movimiento > Velocidad Normal",
+        "Movimiento > Velocidad con Brainrot"
+    },
+    Keybinds = {
+        ["Movimiento > Impulso Rápido"] = "Q"
+    },
     LeftCenterHidden = false,
-    PinGroups = {}
+    PinGroups = {},
+    Theme = {
+        Accent = Color3.fromRGB(220, 40, 40),
+        Background = Color3.fromRGB(15, 15, 18),
+        Secondary = Color3.fromRGB(30, 20, 25),
+        Text = Color3.fromRGB(255, 255, 255),
+        SubText = Color3.fromRGB(180, 180, 180),
+    }
 }
 
--- VENTANA PRINCIPAL
+-- 🪟 VENTANA PRINCIPAL
 local Ventana = Lib:CreateWindow({
     Name = "🕷🎃 666 H4CK 🎃🕸",
     DefaultTab = "Granja",
-    IntroText = "NOVADYNAMICS\nDiscord: discord.gg/9kqrTp2NM",
+    IntroText = [[
+NOVADYNAMICS © 2026
+══════════════════
+  66 H4CK — PRO
+══════════════════
+Discord: discord.gg/9kqrTp2NM
+    ]],
+    IntroTime = 3,
     CloseCallback = function()
-end
+        print("[666 H4CK] ⚡ Cerrado")
+    end
+})
+
 -- ==============================================
--- 🥚 PESTAÑA 1: GRANJA / AUTO ROBO
+-- 🥚 PESTAÑA 1: GRANJA PRINCIPAL
 -- ==============================================
 local TabGranja = Ventana:AddTab("Granja")
-local SeccionAuto = TabGranja:AddSection("🤖 Auto Robo")
 
-SeccionAuto:AddToggle({
-    Name = "Activar Auto Robo",
+local SecAuto = TabGranja:AddSection("🤖 Auto Robo")
+SecAuto:AddToggle({
+    Name = "✅ Activar Auto Grab",
     Default = false,
-    Callback = function(val) 
-        print("[666 H4CK] Auto Robo:", val and "✅ ACTIVO" or "❌ DESACTIVADO")
-    end
+    Callback = function(v) print("[666 H4CK] AutoGrab:", v and "ON ✅" or "OFF ❌") end
 })
-
-SeccionAuto:AddToggle({
-    Name = "Robar solo huevos faltantes",
-    Default = false
-})
-
-SeccionAuto:AddToggle({
-    Name = "Robar huevos del índice",
-    Default = false
-})
-
-SeccionAuto:AddDropdown({
-    Name = "Prioridad de robo",
-    Items = { "Mayor Valor", "Mejor Rareza", "Mayor Peso", "Mejor Mutación", "Menor Valor" },
+SecAuto:AddToggle({Name = "Filtro: Solo faltantes", Default = false})
+SecAuto:AddToggle({Name = "Filtro: Solo índice", Default = false})
+SecAuto:AddToggle({Name = "📦 Entrega instantánea", Default = false})
+SecAuto:AddDropdown({
+    Name = "🎯 Prioridad",
+    Items = {"Mayor Valor", "Mejor Rareza", "Mayor Peso", "Mejor Mutación", "Cercano"},
     Default = "Mayor Valor"
 })
-
-SeccionAuto:AddToggle({
-    Name = "Entrega instantánea",
-    Default = false
-})
-
-SeccionAuto:AddSlider({
-    Name = "Velocidad de movimiento",
-    Min = 1,
-    Max = 100,
-    Default = 16
-})
-
-SeccionAuto:AddSlider({
-    Name = "Velocidad con huevo",
-    Min = 1,
-    Max = 100,
-    Default = 12
-})
-
-SeccionAuto:AddToggle({
-    Name = "👻 Invis Steal",
+SecAuto:AddSlider({Name = "⚡ Velocidad Normal", Min = 1, Max = 50, Default = 16})
+SecAuto:AddSlider({Name = "🐌 Velocidad con Brainrot", Min = 1, Max = 40, Default = 12})
+SecAuto:AddToggle({
+    Name = "👻 Invis Steal (Volteo 180°)",
     Default = false,
-    Callback = function(val)
-        print("[666 H4CK] Invis Steal:", val and "✅ ACTIVO" or "❌ DESACTIVADO")
-    end
+    Callback = function(v) print("[666 H4CK] InvisSteal:", v and "ACTIVO 👻" or "DESACTIVADO") end
+})
+
+local SecExtra = TabGranja:AddSection("🔧 Extras")
+SecExtra:AddButton({
+    Name = "📤 Soltar Brainrot",
+    Callback = function() print("[666 H4CK] Soltado ✅") end
+})
+SecExtra:AddButton({
+    Name = "🔄 Reiniciar",
+    Callback = function() print("[666 H4CK] Reiniciando...") end
 })
 
 -- ==============================================
 -- 🛡️ PESTAÑA 2: PROTECCIÓN
 -- ==============================================
-local TabProteccion = Ventana:AddTab("Protección")
-local SeccionProt = TabProteccion:AddSection("🛡️ Defensa y Seguridad")
+local TabProt = Ventana:AddTab("Protección")
+local SecDef = TabProt:AddSection("🛡️ Defensas")
+SecDef:AddToggle({Name = "🚫 Anti Guardia", Default = true})
+SecDef:AddToggle({Name = "🛡️ Modo Escudo", Default = false})
+SecDef:AddToggle({Name = "💀 Modo Dios", Default = false})
+SecDef:AddToggle({Name = "🦵 Anti Caída / Ragdoll", Default = true})
+SecDef:AddToggle({Name = "👤 Ocultar Jugador", Default = false})
 
-SeccionProt:AddToggle({
-    Name = "Anti Guardia",
-    Default = true
-})
-
-SeccionProt:AddToggle({
-    Name = "Ocultar jugador / Escudo",
-    Default = false
-})
-
-SeccionProt:AddToggle({
-    Name = "Modo Dios — Invulnerable",
-    Default = false
-})
-
-SeccionProt:AddToggle({
-    Name = "Anti Caída / Anti Ragdoll",
-    Default = true
-})
-})
 -- ==============================================
 -- ⚡ PESTAÑA 3: MOVIMIENTO
 -- ==============================================
 local TabMov = Ventana:AddTab("Movimiento")
-local SeccionMov = TabMov:AddSection("🏃 Velocidad y Desplazamiento")
-
-SeccionMov:AddToggle({
-    Name = "Vuelo",
-    Default = false
-})
-
-SeccionMov:AddSlider({
-    Name = "Velocidad de vuelo",
-    Min = 10,
-    Max = 200,
-    Default = 50
-})
-
-SeccionMov:AddSlider({
-    Name = "Impulso de velocidad",
-    Min = 0,
-    Max = 100,
-    Default = 0
-})
-
-SeccionMov:AddKeybind({
-    Name = "Activar impulso rápido",
-    Default = "Q"
-})
+local SecVel = TabMov:AddSection("🏃 Velocidad")
+SecVel:AddToggle({Name = "✈️ Vuelo", Default = false})
+SecVel:AddSlider({Name = "Velocidad de Vuelo", Min = 10, Max = 250, Default = 60})
+SecVel:AddSlider({Name = "🚀 Impulso Rápido", Min = 0, Max = 100, Default = 0})
+SecVel:AddKeybind({Name = "Activar Impulso", Default = "Q"})
 
 -- ==============================================
 -- 👁️ PESTAÑA 4: ESP / VISUAL
 -- ==============================================
 local TabESP = Ventana:AddTab("ESP")
-local SeccionESP = TabESP:AddSection("📌 Detección en pantalla")
-
-SeccionESP:AddToggle({
-    Name = "Mostrar huevos",
-    Default = false
-})
-
-SeccionESP:AddToggle({
-    Name = "Mostrar jugadores",
-    Default = false
-})
-
-SeccionESP:AddToggle({
-    Name = "Mostrar bases",
-    Default = false
-})
-
-SeccionESP:AddToggle({
-    Name = "Mostrar guardias",
-    Default = false
-})
+local SecVis = TabESP:AddSection("📌 Detección")
+SecVis:AddToggle({Name = "🥚 Ver Huevos/Brainrots", Default = false})
+SecVis:AddToggle({Name = "👤 Ver Jugadores", Default = false})
+SecVis:AddToggle({Name = "🏠 Ver Bases", Default = false})
+SecVis:AddToggle({Name = "👮 Ver Guardias", Default = false})
+SecVis:AddToggle({Name = "💎 Mostrar Valor", Default = true})
 
 -- ==============================================
--- ⚙️ PESTAÑA 5: AJUSTES
+-- ⚙️ PESTAÑA 5: SISTEMA
 -- ==============================================
-local TabConf = Ventana:AddTab("Ajustes")
-
-TabConf:AddLabel("——————————————————")
-TabConf:AddLabel("🕷 666 H4CK — NOVADYNAMICS")
-TabConf:AddLabel("💬 Discord: discord.gg/9kqrTp2NM")
-TabConf:AddLabel("——————————————————")
-
-TabConf:AddButton({
-    Name = "Restablecer todo",
-    Callback = function()
-        print("[666 H4CK] ⚙️ Configuración restablecida")
-    end
+local TabSys = Ventana:AddTab("Sistema")
+TabSys:AddLabel("══════════════════════════")
+TabSys:AddLabel("    🕷 666 H4CK — PRO")
+TabSys:AddLabel("    NOVADYNAMICS © 2026")
+TabSys:AddLabel("══════════════════════════")
+TabSys:AddLabel("")
+TabSys:AddLabel("🔗 Discord:")
+TabSys:AddLabel("   discord.gg/9kqrTp2NM")
+TabSys:AddLabel("")
+TabSys:AddLabel("📋 Versión: 1.0.0-PRO")
+TabSys:AddLabel("")
+TabSys:AddButton({
+    Name = "🔄 Restablecer Todo",
+    Callback = function() print("[666 H4CK] Restablecido ✅") end
+})
+TabSys:AddButton({
+    Name = "❌ Cerrar",
+    Callback = function() print("[666 H4CK] Cerrado") end
 })
 
-TabConf:AddButton({
-    Name = "Cerrar menú",
-    Callback = function()
-        print("[666 H4CK] ✅ Menú cerrado")
-    end
-})
-
--- ==============================================
--- ✅ FINALIZAR Y MOSTRAR
--- ==============================================
+-- ✅ FINALIZAR
 Ventana:Finalize()
 
-print("[666 H4CK] ✅ CARGADO COMPLETO")
-print("[666 H4CK] 📋 Pestañas: Granja | Protección | Movimiento | ESP | Ajustes")
+print("[666 H4CK] ═══════════════════════")
+print("[666 H4CK] ✅ CARGADO — VERSIÓN PRO")
+print("[666 H4CK] ═══════════════════════")
+print("[666 H4CK] 📋 Pestañas: Granja | Protección | Movimiento | ESP | Sistema")
 print("[666 H4CK] 🔗 Discord: discord.gg/9kqrTp2NM")
