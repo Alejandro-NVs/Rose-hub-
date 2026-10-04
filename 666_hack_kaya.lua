@@ -7327,11 +7327,12 @@ _G.MeerkoLate("TARGETS", function()
     -- Позиция окна помнится в SideTP.json (поля tgtX/tgtY) и на входе зажимается
     -- по вьюпорту: иначе панель, оттащенная за край и сохранённая, после релога
     -- осталась бы за экраном -- мышкой её оттуда уже не достать.
-    local _tgtY = tonumber(_G._meerko_tgtY) or 250
+    local _pw = 200
+    local _tgtX = tonumber(_G._meerko_tgtX) or math.floor((_vpX - _pw) / 2)
+    local _tgtY = tonumber(_G._meerko_tgtY) or math.floor(_vpY * 0.12)
     if _tgtY + _tgtH > _vpY - 20 then _tgtY = math.max(20, _vpY - 20 - _tgtH) end
     if _tgtY < 0 then _tgtY = 0 end
-    local _tgtX = tonumber(_G._meerko_tgtX) or 24
-    if _tgtX + 288 > _vpX - 10 then _tgtX = math.max(10, _vpX - 10 - 288) end
+    if _tgtX + _pw > _vpX - 10 then _tgtX = math.max(10, _vpX - 10 - _pw) end
     if _tgtX < 0 then _tgtX = 0 end
 
     local root = round(mk("Frame", sg, {
@@ -8244,9 +8245,15 @@ _G.MeerkoLate("EXTRAS", function()
 
     local root = round(mk("Frame", sg, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
-        Size = UDim2.fromOffset(230, 420),
-        Position = UDim2.fromOffset(tonumber(_G._meerko_exX) or 24,
-            tonumber(_G._meerko_exY) or 96),
+        Size = UDim2.fromOffset(170, 300),
+        Position = (function()
+            local cam = workspace.CurrentCamera
+            local vx = (cam and cam.ViewportSize.X) or 400
+            local vy = (cam and cam.ViewportSize.Y) or 700
+            local x = tonumber(_G._meerko_exX) or math.floor((vx - 170) / 2)
+            local y = tonumber(_G._meerko_exY) or math.floor(vy * 0.18)
+            return UDim2.fromOffset(x, y)
+        end)(),
     }), 14)
     mk("UIGradient", root, {
         Rotation = 135,
@@ -8626,12 +8633,19 @@ _G.MeerkoLate("VEHICLE SELECT", function()
     if not sg.Parent then
         pcall(function() sg.Parent = (gethui and gethui()) or game:GetService("CoreGui") end)
     end
-    local W, ROWH = 200, 28
+    local W, ROWH = 150, 24
     local H = 32 + #CARPET_NAMES * (ROWH + 4) + 8
     local root = round(mk("Frame", sg, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
         Size = UDim2.fromOffset(W, H),
-        Position = UDim2.fromOffset(tonumber(_G._meerko_vsX) or 490, tonumber(_G._meerko_vsY) or 96),
+        Position = (function()
+            local cam = workspace.CurrentCamera
+            local vx = (cam and cam.ViewportSize.X) or 400
+            local vy = (cam and cam.ViewportSize.Y) or 700
+            local x = tonumber(_G._meerko_vsX) or math.floor((vx - 150) / 2)
+            local y = tonumber(_G._meerko_vsY) or math.floor(vy * 0.35)
+            return UDim2.fromOffset(x, y)
+        end)(),
     }), 12)
     mk("UIGradient", root, {
         Rotation = 135,
@@ -8769,8 +8783,15 @@ _G.MeerkoLate("TP BIND", function()
 
     local root2 = rnd(mk2("Frame", sg2, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
-        Size = UDim2.fromOffset(230, 98),
-        Position = UDim2.fromOffset(tonumber(_G._meerko_tbX) or 270, tonumber(_G._meerko_tbY) or 340),
+        Size = UDim2.fromOffset(170, 80),
+        Position = (function()
+            local cam = workspace.CurrentCamera
+            local vx = (cam and cam.ViewportSize.X) or 400
+            local vy = (cam and cam.ViewportSize.Y) or 700
+            local x = tonumber(_G._meerko_tbX) or math.floor((vx - 170) / 2)
+            local y = tonumber(_G._meerko_tbY) or math.floor(vy * 0.70)
+            return UDim2.fromOffset(x, y)
+        end)(),
     }), 14)
     mk2("UIGradient", root2, {
         Rotation = 135,
@@ -8950,8 +8971,14 @@ _G.MeerkoLate("TP SPEED", function()
     local root = round(mk("Frame", sg, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
         Size = UDim2.fromOffset(250, H),
-        Position = UDim2.fromOffset(tonumber(_G._meerko_fX) or 300,
-            tonumber(_G._meerko_fY) or 96),
+        Position = (function()
+            local cam = workspace.CurrentCamera
+            local vx = (cam and cam.ViewportSize.X) or 400
+            local vy = (cam and cam.ViewportSize.Y) or 700
+            local x = tonumber(_G._meerko_fX) or math.floor((vx - 170) / 2)
+            local y = tonumber(_G._meerko_fY) or math.floor(vy * 0.28)
+            return UDim2.fromOffset(x, y)
+        end)(),
     }), 14)
     mk("UIGradient", root, {
         Rotation = 135,
@@ -9156,7 +9183,7 @@ _G.MeerkoLate("PR LIST", function()
     local function round(o, r) mk("UICorner", o, { CornerRadius = UDim.new(0, r or 8) }) return o end
     local function stroke(o, col) mk("UIStroke", o, { Color = col or C.line, Thickness = 1 }) return o end
 
-    local W, H = 300, 470
+    local W, H = 200, 320
     local host = (gethui and gethui()) or game:GetService("CoreGui")
     pcall(function()
         local old = host:FindFirstChild("MeerkoPriList")
@@ -9176,8 +9203,14 @@ _G.MeerkoLate("PR LIST", function()
     local root = round(mk("Frame", sg, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
         Size = UDim2.fromOffset(W, H),
-        Position = UDim2.fromOffset(tonumber(_G._stp_panelX) or 300,
-            tonumber(_G._stp_panelY) or 160),
+        Position = (function()
+            local cam = workspace.CurrentCamera
+            local vx = (cam and cam.ViewportSize.X) or 400
+            local vy = (cam and cam.ViewportSize.Y) or 700
+            local x = tonumber(_G._stp_panelX) or math.floor((vx - 200) / 2)
+            local y = tonumber(_G._stp_panelY) or math.floor(vy * 0.22)
+            return UDim2.fromOffset(x, y)
+        end)(),
     }), 14)
     mk("UIGradient", root, {
         Rotation = 135,
@@ -9486,7 +9519,7 @@ _G.MeerkoLate("TIMER ESP", function()
     if _G.MeerkoTimerESP == nil then _G.MeerkoTimerESP = false end
     _G.MeerkoTimerESP = false
 
-    local W, H = 300, 64
+    local W, H = 220, 52
     local host = (gethui and gethui()) or game:GetService("CoreGui")
     for _, par in ipairs({ host, LP:FindFirstChild("PlayerGui") }) do
         pcall(function()
@@ -10031,7 +10064,7 @@ _G.MeerkoLate("INVIS", function()
         { "Depth",            0, 10,  "MeerkoInvisDepth",     0.1, 0.5 },
         { "Auto Invis Delay", 0, 5,   "MeerkoInvisAutoDelay", 0.1, 0.5 },
     }
-    local W = 250
+    local W = 180
     local SLTOP   = TOP + #TOGS * (TOGH + GAP)
     local GRIDTOP = SLTOP + #SLIDERS * ROWH + 4
     local GRIDH   = 30
@@ -10040,8 +10073,14 @@ _G.MeerkoLate("INVIS", function()
     local root = round(mk("Frame", sg, {
         Name = "Root", Active = true, BackgroundColor3 = C.bg, BorderSizePixel = 0,
         Size = UDim2.fromOffset(W, H),
-        Position = UDim2.fromOffset(tonumber(_G._meerko_iX) or 566,
-            tonumber(_G._meerko_iY) or 96),
+        Position = (function()
+            local cam = workspace.CurrentCamera
+            local vx = (cam and cam.ViewportSize.X) or 400
+            local vy = (cam and cam.ViewportSize.Y) or 700
+            local x = tonumber(_G._meerko_iX) or math.floor((vx - 180) / 2)
+            local y = tonumber(_G._meerko_iY) or math.floor(vy * 0.42)
+            return UDim2.fromOffset(x, y)
+        end)(),
     }), 14)
     mk("UIGradient", root, {
         Rotation = 135,
@@ -10355,7 +10394,7 @@ _G.MeerkoLate("AUTO KICK", function()
     end
     _G.MeerkoKickNow = kickNow
 
-    local W, TOGH, TOP, GAP = 220, 34, 44, 6
+    local W, TOGH, TOP, GAP = 160, 28, 36, 4
     local H = TOP + TOGH * 2 + GAP + 12
     local _vpX, _vpY = 1920, 1080
     pcall(function()
@@ -10364,8 +10403,11 @@ _G.MeerkoLate("AUTO KICK", function()
             _vpX, _vpY = cam.ViewportSize.X, cam.ViewportSize.Y
         end
     end)
-    local akX = tonumber(_G._meerko_akX) or 566
-    local akY = tonumber(_G._meerko_akY) or 600
+    local cam = workspace.CurrentCamera
+    local vx = (cam and cam.ViewportSize.X) or 400
+    local vy = (cam and cam.ViewportSize.Y) or 700
+    local akX = tonumber(_G._meerko_akX) or math.floor((vx - 160) / 2)
+    local akY = tonumber(_G._meerko_akY) or math.floor(vy * 0.55)
     if akX + W > _vpX - 10 then akX = math.max(10, _vpX - 10 - W) end
     if akY + H > _vpY - 10 then akY = math.max(10, _vpY - 10 - H) end
 
@@ -10617,7 +10659,7 @@ _G.MeerkoLate("ANTIFLASHER", function()
         table.clear(hooked)
     end
 
-    local W, TOGH, TOP, GAP = 220, 34, 44, 6
+    local W, TOGH, TOP, GAP = 160, 28, 36, 4
     local H = TOP + TOGH + GAP + 12
     local _vpX, _vpY = 1920, 1080
     pcall(function()
@@ -10626,8 +10668,11 @@ _G.MeerkoLate("ANTIFLASHER", function()
             _vpX, _vpY = cam.ViewportSize.X, cam.ViewportSize.Y
         end
     end)
-    local afX = tonumber(_G._kaya_afX) or 566
-    local afY = tonumber(_G._kaya_afY) or 700
+    local cam = workspace.CurrentCamera
+    local vx = (cam and cam.ViewportSize.X) or 400
+    local vy = (cam and cam.ViewportSize.Y) or 700
+    local afX = tonumber(_G._kaya_afX) or math.floor((vx - 160) / 2)
+    local afY = tonumber(_G._kaya_afY) or math.floor(vy * 0.62)
     if afX + W > _vpX - 10 then afX = math.max(10, _vpX - 10 - W) end
     if afY + H > _vpY - 10 then afY = math.max(10, _vpY - 10 - H) end
 
