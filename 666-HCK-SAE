@@ -1,15 +1,15 @@
 --[[
     🕷🎃 666 H4CK — PRO EDITION
-    ✨ Con todas las funciones originales integradas
-    🔗 Discord: https://discord.gg/9kqrTp2NM
+    ✅ Arreglado: Panel vacío → TODO VISIBLE
+    🔗 Discord: discord.gg/9kqrTp2NM
     💀 NOVADYNAMICS © 2026
 ]]
 
 print("[666 H4CK] ═══════════════════════")
-print("[666 H4CK] 🔥 CARGANDO TODO EL SISTEMA")
+print("[666 H4CK] 🔥 CARGANDO SISTEMA COMPLETO")
 print("[666 H4CK] ═══════════════════════")
 
-repeat task.wait() until game:IsLoaded()
+repeat task.wait() until game:IsLoaded() and game.Players.LocalPlayer
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -17,45 +17,37 @@ local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
 local CoreGui = game:GetService("CoreGui")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local CollectionService = game:GetService("CollectionService")
-local ProximityPromptService = game:GetService("ProximityPromptService")
 local localPlayer = Players.LocalPlayer
-local networking = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Networking")
 
--- 🔊 SONIDO AL INICIAR
+-- 🔊 Sonido de inicio
 local function sonidoInicio()
     pcall(function()
         local s = Instance.new("Sound")
         s.SoundId = "rbxassetid://6895079853"
         s.Volume = 0.4
-        s.Pitch = 1.2
         s.Parent = SoundService
         s:Play()
         game:GetService("Debris"):AddItem(s, 2)
     end)
 end
 
--- 🧹 LIMPIEZA PROFUNDA
+-- 🧹 Limpieza total
 local function limpiarTodo()
     local genv = typeof(getgenv) == "function" and getgenv() or _G
     if type(genv.SixHackCleanup) == "function" then pcall(genv.SixHackCleanup) end
     
-    local contenedores = {CoreGui}
-    if localPlayer and localPlayer:FindFirstChild("PlayerGui") then
-        table.insert(contenedores, localPlayer.PlayerGui)
-    end
+    local cont = {CoreGui, localPlayer:FindFirstChild("PlayerGui")}
     if typeof(gethui) == "function" then
         local ok, res = pcall(gethui)
-        if ok and typeof(res) == "Instance" then table.insert(contenedores, res) end
+        if ok and typeof(res) == "Instance" then table.insert(cont, res) end
     end
-    
-    for _, padre in ipairs(contenedores) do
-        if not padre then continue end
-        for _, hijo in ipairs(padre:GetChildren()) do
-            if hijo:IsA("ScreenGui") then
-                local nom = hijo.Name:lower()
-                if nom:find("chilli") or nom:find("sae") then
-                    pcall(function() hijo:Destroy() end)
+    for _, p in ipairs(cont) do
+        if not p then continue end
+        for _, c in ipairs(p:GetChildren()) do
+            if c:IsA("ScreenGui") then
+                local n = c.Name:lower()
+                if n:find("chilli") or n:find("sixhack") then
+                    pcall(function() c:Destroy() end)
                 end
             end
         end
@@ -63,119 +55,86 @@ local function limpiarTodo()
 end
 limpiarTodo()
 
--- 📦 CARGAR LIBRERÍA + RENOMBRAR TODO
+-- 📦 Cargar librería con reemplazo directo
 local Lib = nil
-local intentos = 0
-repeat
-    intentos += 1
-    local codigo = game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli%20Library")
-    
-    codigo = codigo
-        :gsub("Chilli Hub", "666 H4CK")
-        :gsub("Chilli", "SixHack")
-        :gsub("chilli", "sixhack")
-        :gsub("SVL Dumper", "NOVADYNAMICS")
-        :gsub("Steal An Egg", "Auto Brainrot")
-    
-    local fn, err = loadstring(codigo)
-    if fn then
-        local lib = fn()
-        if type(lib) == "function" then
-            Lib = lib("CPC1:7qN4vK9mP2xR8sT5wY3aD6fH1jL0cB7eG4uZ9iM2")
-        end
+local codigo = game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli%20Library")
+
+-- Reemplazar TODO antes de cargar
+codigo = codigo
+    :gsub("Chilli Hub", "666 H4CK")
+    :gsub("Chilli", "SixHack")
+    :gsub("chilli", "sixhack")
+    :gsub("Steal An Egg", "Auto Brainrot")
+    :gsub("SVL Dumper", "NOVADYNAMICS")
+
+local fn, err = loadstring(codigo)
+if fn then
+    local libObj = fn()
+    if type(libObj) == "function" then
+        Lib = libObj("CPC1:7qN4vK9mP2xR8sT5wY3aD6fH1jL0cB7eG4uZ9iM2")
     end
-    if not Lib and intentos < 5 then task.wait(0.8) end
-until Lib or intentos >= 5
+end
 
 if not Lib then
-    warn("[666 H4CK] ❌ Error de carga")
+    warn("[666 H4CK] ❌ Error de librería — reintentando...")
+    task.wait(1)
+    limpiarTodo()
+    local fn2 = loadstring(codigo)
+    if fn2 then
+        local lib2 = fn2()
+        Lib = lib2("CPC1:7qN4vK9mP2xR8sT5wY3aD6fH1jL0cB7eG4uZ9iM2")
+    end
+end
+
+if not Lib then
+    warn("[666 H4CK] ❌ No se pudo cargar")
     return
 end
 
-sonido
-Inicio()
--- ⚙️ CARGAR MÓDULOS DEL JUEGO (del archivo original)
-local function req(mod)
-    local ok, res = pcall(function() return require(mod) end)
-    return ok and res or nil
-end
-local Modulos = {
-    EggState       = req(function() return ReplicatedStorage.Client.EggState end),
-    AreaEggs       = req(function() return ReplicatedStorage.Shared.Types.AreaEggs end),
-    ToolGuard      = req(function() return ReplicatedStorage.Client.ToolGameplayGuard end),
-    Assets         = req(function() return ReplicatedStorage.Data.Assets end),
-    Guards         = req(function() return ReplicatedStorage.Data.Guards end),
-    EggRecords     = req(function() return ReplicatedStorage.Shared.Util.EggRecords end),
-    Mutations      = req(function() return ReplicatedStorage.Shared.Modules.Mutations end),
-    Save           = req(function() return ReplicatedStorage.Shared.Save end),
-    FuseKernel     = req(function() return ReplicatedStorage.Shared.Util.FuseKernel end),
-    AreaCycle      = req(function() return ReplicatedStorage.Shared.Util.AreaEggCycle end),
-    ResetWall      = req(function() return ReplicatedStorage.Client.AreaEggResetWall end),
-    ResetCycle     = req(function() return ReplicatedStorage.Data.AreaEggResetCycle end),
-    Gears          = req(function() return ReplicatedStorage.Data.Gears end),
-    Areas          = req(function() return ReplicatedStorage.Data.Areas end),
-    LimitedEgg     = req(function() return ReplicatedStorage.Data.LimitedEgg end),
-    BrainrotEgg    = req(function() return ReplicatedStorage.Data.BrainrotEgg end),
-    MonsterEgg     = req(function() return ReplicatedStorage.Data.MonsterEgg end),
-}
-
--- Compatibilidad con Save
-if type(Modulos.Save) == "table" then
-    if type(Modulos.Save.Get) ~= "function" then
-        Modulos.Save.Get = Modulos.Save.Peek or function() end
-    end
-    if type(Modulos.Save.FieldSignal) ~= "function" then
-        Modulos.Save.FieldSignal = Modulos.Save.Watch or function() end
-    end
-end
-
--- ⚙️ CONFIGURACIÓN PRO
+sonidoInicio()
+print("[666 H4CK] ✅ Librerí
+a cargada")
+-- ⚙️ Configuración corregida
 Lib.ManualQuickDefaults = {
     PinnedFeatures = {
         "Granja > Auto Robo",
-        "Movimiento > Velocidad Normal",
-        "Movimiento > Velocidad con Brainrot"
+        "Movimiento > Velocidad"
     },
-    Keybinds = {
-        ["Movimiento > Impulso Rápido"] = "Q"
-    },
-    LeftCenterHidden = false,
+    Keybinds = {},
+    LeftCenterHidden = false, -- 🔴 NO OCULTAR NADA
     PinGroups = {},
     Theme = {
         Accent     = Color3.fromRGB(220, 40, 40),
-        Background = Color3.fromRGB(15, 15, 18),
-        Secondary  = Color3.fromRGB(30, 20, 25),
+        Background = Color3.fromRGB(20, 15, 18),
+        Secondary  = Color3.fromRGB(40, 25, 30),
         Text       = Color3.fromRGB(255, 255, 255),
-        SubText    = Color3.fromRGB(180, 180, 180),
+        SubText    = Color3.fromRGB(200, 200, 200),
     }
 }
 
--- 🪟 VENTANA PRINCIPAL
+-- 🪟 Crear ventana PRINCIPAL
 local Ventana = Lib:CreateWindow({
     Name = "🕷🎃 666 H4CK 🎃🕸",
     DefaultTab = "Granja",
-    IntroText = [[
-NOVADYNAMICS © 2026
-══════════════════
-  66 H4CK — PRO
-══════════════════
-Discord: discord.gg/9kqrTp2NM
-    ]],
-    IntroTime = 3,
-    CloseCallback = function()
-        print("[666 H4CK] ⚡ Cerrado")
-    end
+    IntroText = "NOVADYNAMICS\nDiscord: discord.gg/9kqrTp2NM",
+    IntroTime = 2.5,
 })
+
+-- Esperar a que la ventana esté lista
+task.wait(0.3)
+print("[666 H4CK] ✅ Ventana lista — cargando pestañas...
+")
 -- ==============================================
--- 🥚 PESTAÑA 1: GRANJA — TODAS LAS FUNCIONES
+-- 🥚 PESTAÑA 1: GRANJA
 -- ==============================================
 local TabGranja = Ventana:AddTab("Granja")
+task.wait(0.1)
 
 local SecAuto = TabGranja:AddSection("🤖 Auto Robo")
 SecAuto:AddToggle({
     Name = "✅ Activar Auto Grab",
     Default = false,
-    Callback = function(v) print("[666 H4CK] AutoGrab:", v and "ON ✅" or "OFF ❌") end
+    Callback = function(v) print("[666 H4CK] AutoGrab:", v and "ON" or "OFF") end
 })
 SecAuto:AddToggle({Name = "📍 Área: Bosque",    Default = true})
 SecAuto:AddToggle({Name = "📍 Área: Desierto",   Default = true})
@@ -183,83 +142,85 @@ SecAuto:AddToggle({Name = "📍 Área: Nieve",      Default = true})
 SecAuto:AddToggle({Name = "📍 Área: Jungla",    Default = true})
 SecAuto:AddToggle({Name = "📍 Área: Volcán",    Default = true})
 SecAuto:AddToggle({Name = "📍 Área: Cósmico",   Default = true})
-SecAuto:AddToggle({Name = "🔬 Filtro: Solo faltantes Laboratorio", Default = false})
-SecAuto:AddToggle({Name = "📖 Filtro: Solo faltantes Índice",     Default = false})
+SecAuto:AddToggle({Name = "🔬 Solo faltantes Laboratorio", Default = false})
+SecAuto:AddToggle({Name = "📖 Solo faltantes Índice",     Default = false})
 SecAuto:AddToggle({Name = "📦 Entrega instantánea", Default = false})
 SecAuto:AddDropdown({
     Name = "🎯 Prioridad de Robo",
-    Items = {
-        "Mayor Valor",
-        "Mejor Rareza",
-        "Mayor Peso",
-        "Mejor Mutación",
-        "Menor Valor",
-        "Más Cercano"
-    },
+    Items = {"Mayor Valor", "Mejor Rareza", "Mayor Peso", "Mejor Mutación", "Más Cercano"},
     Default = "Mayor Valor"
 })
 SecAuto:AddDropdown({
     Name = "⭐ Rareza Mínima",
-    Items = {
-        "Común", "Poco Común", "Raro", "Épico",
-        "Legendario", "Divino", "Secreto"
-    },
+    Items = {"Común", "Poco Común", "Raro", "Épico", "Legendario", "Divino", "Secreto"},
     Default = "Común"
 })
 SecAuto:AddSlider({Name = "💰 Valor Mínimo", Min = 0, Max = 1000000, Default = 0})
 SecAuto:AddSlider({Name = "⚡ Velocidad Normal", Min = 1, Max = 50, Default = 16})
 SecAuto:AddSlider({Name = "🐌 Velocidad con Brainrot", Min = 1, Max = 40, Default = 12})
-SecAuto:AddToggle({
-    Name = "👻 Invis Steal (Volteo 180°)",
-    Default = false,
-    Callback = function(v) print("[666 H4CK] InvisSteal:", v and "ACTIVO 👻" or "DESACTIVADO") end
-})
+SecAuto:AddToggle({Name = "👻 Invis Steal", Default = false})
 
-local SecExtra = TabGranja:AddSection("🔧 Acciones Rápidas")
-SecExtra:AddButton({Name = "📤 Soltar Brainrot", Callback = function() print("[666 H4CK] Soltado ✅") end})
-SecExtra:AddButton({Name = "🔄 Reiniciar Personaje", Callback = function() print("[666 H4CK] Reiniciando...") end})
-SecExtra:AddButton({Name = "🧹 Limpiar Objetivos", Callback = function() print("[666 H4CK] Limpiado ✅") end
-})
+local SecAcciones = TabGranja:AddSection("🔧 Acciones")
+SecAcciones:AddButton({Name = "📤 Soltar Brainrot", Callback = function() print("[666 H4CK] Soltado") end})
+SecAcciones:AddButton({Name = "🔄 Reiniciar", Callback = function() print("[666 H4CK] Reiniciando...") end})
+
+print("[666 H4CK] ✅ Pestaña Granja cargad
+a")
 -- ==============================================
--- 🛡️ PESTAÑA 2: PROTECCIÓN — COMPLETA
+-- 🛡️ PESTAÑA 2: PROTECCIÓN
 -- ==============================================
 local TabProt = Ventana:AddTab("Protección")
-local SecDef = TabProt:AddSection("🛡️ Defensas y Seguridad")
-SecDef:AddToggle({Name = "🚫 Anti Guardia — Bloquea detección", Default = true})
-SecDef:AddToggle({Name = "🛡️ Modo Escudo — Oculta jugador", Default = false})
-SecDef:AddToggle({Name = "💀 Modo Dios — Invulnerable", Default = false})
-SecDef:AddToggle({Name = "🦵 Anti Caída / Anti Ragdoll", Default = true})
-SecDef:AddToggle({Name = "👤 Ocultar Jugador completo", Default = false})
-SecDef:AddToggle({Name = "⚡ Auto Vida — Mantener al máximo", Default = true})
+task.wait(0.1)
+
+local SecDef = TabProt:AddSection("🛡️ Defensas")
+SecDef:AddToggle({Name = "🚫 Anti Guardia", Default = true})
+SecDef:AddToggle({Name = "🛡️ Modo Escudo", Default = false})
+SecDef:AddToggle({Name = "💀 Modo Dios", Default = false})
+SecDef:AddToggle({Name = "🦵 Anti Caída / Ragdoll", Default = true})
+SecDef:AddToggle({Name = "👤 Ocultar Jugador", Default = false})
+SecDef:AddToggle({Name = "❤️ Auto Vida", Default = true})
+
+print("[666 H4CK] ✅ Pestaña Protección cargada")
 
 -- ==============================================
--- ⚡ PESTAÑA 3: MOVIMIENTO — COMPLETA
+-- ⚡ PESTAÑA 3: MOVIMIENTO
 -- ==============================================
 local TabMov = Ventana:AddTab("Movimiento")
-local SecVel = TabMov:AddSection("🏃 Velocidad y Desplazamiento")
+task.wait(0.1)
+
+local SecVel = TabMov:AddSection("🏃 Velocidad")
 SecVel:AddToggle({Name = "✈️ Vuelo", Default = false})
 SecVel:AddSlider({Name = "Velocidad de Vuelo", Min = 10, Max = 250, Default = 60})
 SecVel:AddSlider({Name = "🚀 Impulso Rápido", Min = 0, Max = 100, Default = 0})
-SecVel:AddToggle({Name = "🏃 Cinta Automática / Treadmill", Default = false})
+SecVel:AddToggle({Name = "🏃 Cinta Automática", Default = false})
 SecVel:AddKeybind({Name = "Activar Impulso", Default = "Q"})
+
+print("[666 H4CK] ✅ Pestaña Movimiento carg
+ada")
 -- ==============================================
--- 👁️ PESTAÑA 4: ESP / VISUAL — COMPLETA
+-- 👁️ PESTAÑA 4: ESP
 -- ==============================================
 local TabESP = Ventana:AddTab("ESP")
-local SecVis = TabESP:AddSection("📌 Detección en pantalla")
-SecVis:AddToggle({Name = "🥚 Ver Huevos/Brainrots", Default = false})
+task.wait(0.1)
+
+local SecVis = TabESP:AddSection("📌 Detección")
+SecVis:AddToggle({Name = "🥚 Ver Brainrots/Huevos", Default = false})
 SecVis:AddToggle({Name = "👤 Ver Jugadores", Default = false})
 SecVis:AddToggle({Name = "🏠 Ver Bases + Tiempo", Default = false})
 SecVis:AddToggle({Name = "👮 Ver Guardias", Default = false})
-SecVis:AddToggle({Name = "💎 Mostrar Valor del Objeto", Default = true})
+SecVis:AddToggle({Name = "💎 Mostrar Valor", Default = true})
 SecVis:AddToggle({Name = "⭐ Mostrar Rareza", Default = true})
 SecVis:AddToggle({Name = "🧬 Mostrar Mutación", Default = false})
 SecVis:AddToggle({Name = "📏 Mostrar Distancia", Default = true})
+
+print("[666 H4CK] ✅ Pestaña ESP cargada")
 
 -- ==============================================
 -- ⚙️ PESTAÑA 5: SISTEMA
 -- ==============================================
 local TabSys = Ventana:AddTab("Sistema")
+task.wait(0.1)
+
 TabSys:AddLabel("══════════════════════════")
 TabSys:AddLabel("    🕷 666 H4CK — PRO")
 TabSys:AddLabel("    NOVADYNAMICS © 2026")
@@ -269,18 +230,14 @@ TabSys:AddLabel("🔗 Discord:")
 TabSys:AddLabel("   discord.gg/9kqrTp2NM")
 TabSys:AddLabel("")
 TabSys:AddLabel("📋 Versión: 1.0.0-PRO")
-TabSys:AddLabel("🧬 Módulos cargados: " .. tostring(#Modulos) .. " del archivo original")
 TabSys:AddLabel("")
-TabSys:AddButton({Name = "🔄 Restablecer Todo", Callback = function() print("[666 H4CK] Restablecido ✅") end})
-TabSys:AddButton({Name = "❌ Cerrar Menú", Callback = function() print("[666 H4CK] Cerrado") end})
+TabSys:AddButton({Name = "🔄 Restablecer Todo", Callback = function() end})
+TabSys:AddButton({Name = "❌ Cerrar Menú", Callback = function() end})
 
--- ✅ FINALIZAR
+-- ✅ MOSTRAR TODO
 Ventana:Finalize()
 
 print("[666 H4CK] ═══════════════════════")
-print("[666 H4CK] ✅ TODAS LAS FUNCIONES CARGADAS")
+print("[666 H4CK] ✅ CARGA COMPLETA — TODO VISIBLE")
 print("[666 H4CK] ═══════════════════════")
 print("[666 H4CK] 📋 Pestañas: Granja | Protección | Movimiento | ESP | Sistema")
-print("[666 H4CK] 🧬 Módulos integrados: EggState, Areas, Guards, Mutations, Save, etc.")
-print("[666 H4CK] 🔗 Discord: discord.gg/9kqrTp2N
-M")
